@@ -77,6 +77,10 @@ button {
     font-size: 17px;
 }
 
+.reset {
+    background: #c00000;
+}
+
 #result {
     margin-top: 25px;
     text-align: center;
@@ -114,6 +118,7 @@ button {
     text-align: center;
     color: #777;
     font-size: 13px;
+    line-height: 1.5;
 }
 
 </style>
@@ -133,7 +138,8 @@ DEMO
 <h1>Create New Record</h1>
 
 <div class="next">
-Next Reference: <span id="nextNumber">0001</span>
+Next Reference:
+<span id="nextNumber">0001</span>
 </div>
 
 <label>Name</label>
@@ -155,6 +161,16 @@ Generate QR Code
 <div id="result"></div>
 
 <div id="qr"></div>
+
+<button class="reset" onclick="resetDemo()">
+⚠️ RESET DEMO
+</button>
+
+<p class="small">
+⚠️ RESET WARNING<br>
+Resetting will remove the demo data stored by this browser
+and return the reference number to 0001.
+</p>
 
 <p class="small">
 DEMO SYSTEM — numbering starts at 0001
@@ -205,13 +221,6 @@ function generateQR() {
         document.getElementById("notes").value || "Sample";
 
 
-    /*
-       Store the record inside the QR URL.
-
-       encodeURIComponent makes the information
-       safe to put into the URL.
-    */
-
     let data =
         "ref=" + encodeURIComponent(reference) +
         "&name=" + encodeURIComponent(name) +
@@ -225,6 +234,7 @@ function generateQR() {
 
 
     document.getElementById("qr").innerHTML = "";
+
 
     new QRCode(
         document.getElementById("qr"),
@@ -243,10 +253,6 @@ function generateQR() {
         "<p>QR code created successfully.</p>";
 
 
-    /*
-       Move to the next number.
-    */
-
     localStorage.setItem(
         "demoNextNumber",
         number + 1
@@ -257,16 +263,57 @@ function generateQR() {
 }
 
 
+function resetDemo() {
+
+    let firstWarning = confirm(
+        "⚠️ WARNING\n\n" +
+        "This will reset the DEMO system back to reference 0001.\n\n" +
+        "All demo data stored by this browser will be removed.\n\n" +
+        "This cannot be undone.\n\n" +
+        "Do you want to continue?"
+    );
+
+
+    if (!firstWarning) {
+        return;
+    }
+
+
+    let secondWarning = confirm(
+        "⚠️ FINAL WARNING\n\n" +
+        "Reset everything and start again at 0001?"
+    );
+
+
+    if (!secondWarning) {
+        return;
+    }
+
+
+    localStorage.removeItem("demoNextNumber");
+
+
+    alert(
+        "Demo system has been reset.\n\n" +
+        "The next reference will be 0001."
+    );
+
+
+    location.href =
+        "https://jonnybsalt.github.io/Oak/?reset=1";
+}
+
+
 /*
-   If somebody scans a QR code,
-   display the record instead of
-   displaying the generator.
+   Display an individual record when
+   somebody scans a QR code.
 */
 
 function showRecord() {
 
     let params =
         new URLSearchParams(window.location.search);
+
 
     if (!params.has("ref")) {
         return;
@@ -306,21 +353,28 @@ function showRecord() {
         <div class="record">
 
             <label>Name</label>
+
             <div class="value">
                 ${escapeHTML(name)}
             </div>
 
+
             <label>Address</label>
+
             <div class="value">
                 ${escapeHTML(address)}
             </div>
 
+
             <label>Item</label>
+
             <div class="value">
                 ${escapeHTML(item)}
             </div>
 
+
             <label>Notes</label>
+
             <div class="value">
                 ${escapeHTML(notes)}
             </div>
