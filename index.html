@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo Information Form</title>
+
+<title>Demo QR Record 0001</title>
 
 <style>
+
 body {
     font-family: Arial, sans-serif;
     background: #f2f2f2;
@@ -31,6 +33,13 @@ body {
     margin-bottom: 10px;
 }
 
+.reference {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
 h1 {
     text-align: center;
 }
@@ -42,7 +51,8 @@ label {
     margin-bottom: 6px;
 }
 
-input, textarea {
+input,
+textarea {
     width: 100%;
     padding: 12px;
     box-sizing: border-box;
@@ -72,6 +82,7 @@ button {
     color: green;
     font-weight: bold;
 }
+
 </style>
 </head>
 
@@ -79,28 +90,33 @@ button {
 
 <div class="container">
 
-<div class="demo">DEMO</div>
+<div class="demo">
+DEMO
+</div>
+
+<div class="reference">
+Reference: 0001
+</div>
 
 <h1>Information Form</h1>
 
 <form id="form">
 
 <label>Name</label>
-<input type="text" name="name">
+<input type="text" value="Sample">
 
 <label>Address</label>
-<input type="text" name="address">
+<input type="text" value="Sample">
 
 <label>Item</label>
-<input type="text" name="item">
-
-<label>Reference Number</label>
-<input type="text" name="reference">
+<input type="text" value="Sample">
 
 <label>Notes</label>
-<textarea name="notes"></textarea>
+<textarea>Sample</textarea>
 
-<button type="submit">Submit</button>
+<button type="submit">
+Submit
+</button>
 
 <div id="message"></div>
 
@@ -109,11 +125,16 @@ button {
 </div>
 
 <script>
+
 document.getElementById("form").addEventListener("submit", function(event) {
+
     event.preventDefault();
+
     document.getElementById("message").textContent =
-        "Demo submitted successfully.";
+        "Demo 0001 submitted successfully.";
+
 });
+
 </script>
 
 </body>
