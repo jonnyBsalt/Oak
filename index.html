@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DEMO 0001</title>
+<title>DEMO QR Generator</title>
 
 <style>
 
@@ -16,7 +17,7 @@ body {
 }
 
 .container {
-    max-width: 500px;
+    max-width: 520px;
     margin: auto;
     background: white;
     padding: 25px;
@@ -33,15 +34,15 @@ body {
     margin-bottom: 10px;
 }
 
-.reference {
-    text-align: center;
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 25px;
-}
-
 h1 {
     text-align: center;
+}
+
+.next {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 label {
@@ -54,8 +55,8 @@ label {
 input,
 textarea {
     width: 100%;
-    padding: 12px;
     box-sizing: border-box;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
@@ -76,14 +77,49 @@ button {
     font-size: 17px;
 }
 
-#message {
+#result {
+    margin-top: 25px;
     text-align: center;
-    margin-top: 15px;
-    color: green;
+}
+
+#qr {
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.reference {
+    font-size: 24px;
     font-weight: bold;
 }
 
+.record {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.record label {
+    margin-top: 14px;
+}
+
+.value {
+    padding: 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    white-space: pre-wrap;
+}
+
+.small {
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+}
+
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
 
 <body>
@@ -94,46 +130,224 @@ button {
 DEMO
 </div>
 
-<div class="reference">
-Reference: 0001
+<h1>Create New Record</h1>
+
+<div class="next">
+Next Reference: <span id="nextNumber">0001</span>
 </div>
 
-<h1>Information Form</h1>
-
-<form id="form">
-
 <label>Name</label>
-<input type="text" name="name" value="Sample">
+<input id="name" placeholder="Enter name">
 
 <label>Address</label>
-<input type="text" name="address" value="Sample">
+<input id="address" placeholder="Enter address">
 
 <label>Item</label>
-<input type="text" name="item" value="Sample">
+<input id="item" placeholder="Enter item">
 
 <label>Notes</label>
-<textarea name="notes">Sample</textarea>
+<textarea id="notes" placeholder="Enter notes"></textarea>
 
-<button type="submit">
-Submit
+<button onclick="generateQR()">
+Generate QR Code
 </button>
 
-<div id="message"></div>
+<div id="result"></div>
 
-</form>
+<div id="qr"></div>
+
+<p class="small">
+DEMO SYSTEM — numbering starts at 0001
+</p>
 
 </div>
 
 <script>
 
-document.getElementById("form").addEventListener("submit", function(event) {
+function getNextNumber() {
 
-    event.preventDefault();
+    let number = localStorage.getItem("demoNextNumber");
 
-    document.getElementById("message").textContent =
-        "Demo 0001 submitted successfully.";
+    if (!number) {
+        number = 1;
+    }
 
-});
+    return parseInt(number);
+}
+
+
+function displayNextNumber() {
+
+    let number = getNextNumber();
+
+    document.getElementById("nextNumber").textContent =
+        String(number).padStart(4, "0");
+}
+
+
+function generateQR() {
+
+    let number = getNextNumber();
+
+    let reference =
+        String(number).padStart(4, "0");
+
+    let name =
+        document.getElementById("name").value || "Sample";
+
+    let address =
+        document.getElementById("address").value || "Sample";
+
+    let item =
+        document.getElementById("item").value || "Sample";
+
+    let notes =
+        document.getElementById("notes").value || "Sample";
+
+
+    /*
+       Store the record inside the QR URL.
+
+       encodeURIComponent makes the information
+       safe to put into the URL.
+    */
+
+    let data =
+        "ref=" + encodeURIComponent(reference) +
+        "&name=" + encodeURIComponent(name) +
+        "&address=" + encodeURIComponent(address) +
+        "&item=" + encodeURIComponent(item) +
+        "&notes=" + encodeURIComponent(notes);
+
+
+    let url =
+        "https://jonnybsalt.github.io/Oak/?" + data;
+
+
+    document.getElementById("qr").innerHTML = "";
+
+    new QRCode(
+        document.getElementById("qr"),
+        {
+            text: url,
+            width: 250,
+            height: 250
+        }
+    );
+
+
+    document.getElementById("result").innerHTML =
+        "<div class='reference'>DEMO " +
+        reference +
+        "</div>" +
+        "<p>QR code created successfully.</p>";
+
+
+    /*
+       Move to the next number.
+    */
+
+    localStorage.setItem(
+        "demoNextNumber",
+        number + 1
+    );
+
+
+    displayNextNumber();
+}
+
+
+/*
+   If somebody scans a QR code,
+   display the record instead of
+   displaying the generator.
+*/
+
+function showRecord() {
+
+    let params =
+        new URLSearchParams(window.location.search);
+
+    if (!params.has("ref")) {
+        return;
+    }
+
+
+    let reference =
+        params.get("ref") || "";
+
+    let name =
+        params.get("name") || "";
+
+    let address =
+        params.get("address") || "";
+
+    let item =
+        params.get("item") || "";
+
+    let notes =
+        params.get("notes") || "";
+
+
+    document.body.innerHTML = `
+
+    <div class="container">
+
+        <div class="demo">
+            DEMO
+        </div>
+
+        <div class="reference">
+            Reference: ${escapeHTML(reference)}
+        </div>
+
+        <h1>Information</h1>
+
+        <div class="record">
+
+            <label>Name</label>
+            <div class="value">
+                ${escapeHTML(name)}
+            </div>
+
+            <label>Address</label>
+            <div class="value">
+                ${escapeHTML(address)}
+            </div>
+
+            <label>Item</label>
+            <div class="value">
+                ${escapeHTML(item)}
+            </div>
+
+            <label>Notes</label>
+            <div class="value">
+                ${escapeHTML(notes)}
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+}
+
+
+function escapeHTML(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+displayNextNumber();
+
+showRecord();
 
 </script>
 
