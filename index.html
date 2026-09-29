@@ -486,9 +486,9 @@ button:hover {
 
     <div class="card">
 
-        <h2>
-            Create Customer / Record
-        </h2>
+       <h2 id="formTitle">
+    Create Customer / Record
+</h2>
 
         <input
             id="customer"
@@ -564,11 +564,12 @@ button:hover {
         ></textarea>
 
         <button
-            class="orange"
-            onclick="createRecord()"
-        >
-            CREATE RECORD
-        </button>
+    id="recordSubmitButton"
+    class="orange"
+    onclick="createRecord()"
+>
+    CREATE RECORD
+</button>
 
     </div>
 
@@ -689,6 +690,8 @@ const supabaseClient =
 let records = [];
 
 let selectedRecord = null;
+
+let editingRecordId = null;    
 
 let selectedBox = 1;
 
@@ -1019,6 +1022,93 @@ async function createRecord() {
 
 }
 
+/* -------------------------
+   EDIT RECORD
+------------------------- */
+
+function editRecord(id) {
+
+    const record =
+        records.find(
+            function(r) {
+                return r.id === id;
+            }
+        );
+
+    if(!record) {
+        return;
+    }
+
+    editingRecordId = id;
+
+    document
+        .getElementById("customer")
+        .value =
+        record.customer_name || "";
+
+    document
+        .getElementById("telephone")
+        .value =
+        record.telephone || "";
+
+    document
+        .getElementById("email")
+        .value =
+        record.email || "";
+
+    document
+        .getElementById("address")
+        .value =
+        record.address || "";
+
+    document
+        .getElementById("item")
+        .value =
+        record.item_contents || "";
+
+    document
+        .getElementById("amount")
+        .value =
+        record.payment_amount ?? "";
+
+    document
+        .getElementById("dueDate")
+        .value =
+        record.payment_due || "";
+
+    document
+        .getElementById("paymentStatus")
+        .value =
+        record.payment_status || "Unpaid";
+
+    document
+        .getElementById("boxCount")
+        .value =
+        record.box_count || 1;
+
+    document
+        .getElementById("notes")
+        .value =
+        record.notes || "";
+
+    document
+        .getElementById("formTitle")
+        .textContent =
+        "Edit Customer / Record";
+
+    document
+        .getElementById("recordSubmitButton")
+        .textContent =
+        "SAVE CHANGES";
+
+    document
+        .getElementById("recordsCard")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+}    
 
 /* -------------------------
    DISPLAY RECORDS
@@ -1104,11 +1194,17 @@ function displayRecords() {
 
                 '<div class="client-actions">' +
 
-                    '<button onclick="showQR(\'' +
-                        record.id +
-                    '\')">' +
-                        'QR / LABELS' +
-                    '</button>' +
+                    '<button onclick="editRecord(\'' +
+record.id +
+'\')">' +
+'EDIT' +
+'</button>' +
+
+'<button onclick="showQR(\'' +
+record.id +
+'\')">' +
+'QR / LABELS' +
+'</button>' +
 
                     '<button class="red" onclick="archiveRecord(\'' +
                         record.id +
