@@ -2596,10 +2596,47 @@ async function confirmDelivery(
 
 
     message.textContent =
-        "Sending...";
+        "Confirming delivery...";
 
 
-    const result =
+    /* -------------------------
+       GET RECORD INFORMATION
+    ------------------------- */
+
+    const recordResult =
+        await supabaseClient
+            .rpc(
+                "get_moovit_qr_record",
+                {
+                    p_qr_token:
+                        token
+                }
+            );
+
+
+    if(
+        recordResult.error ||
+        !recordResult.data ||
+        !recordResult.data.length
+    ) {
+
+        message.textContent =
+            "Could not find this delivery.";
+
+        return;
+
+    }
+
+
+    const record =
+        recordResult.data[0];
+
+
+    /* -------------------------
+       CONFIRM DELIVERY
+    ------------------------- */
+
+    const deliveryResult =
         await supabaseClient
             .rpc(
                 "confirm_moovit_delivery",
@@ -2611,12 +2648,12 @@ async function confirmDelivery(
 
 
     if(
-        result.error
+        deliveryResult.error
     ) {
 
         message.textContent =
             "Could not confirm delivery: " +
-            result.error.message;
+            deliveryResult.error.message;
 
         return;
 
@@ -2624,8 +2661,8 @@ async function confirmDelivery(
 
 
     if(
-        !result.data ||
-        !result.data.length
+        !deliveryResult.data ||
+        !deliveryResult.data.length
     ) {
 
         message.textContent =
@@ -2637,7 +2674,90 @@ async function confirmDelivery(
 
 
     message.textContent =
-        "Delivery confirmed. MOOVIT has been notified.";
+        "Delivery confirmed. Sending notification...";
+
+
+    /* -------------------------
+       SEND EMAIL
+    ------------------------- */
+
+    const emailResult =
+        await supabaseClient.functions.invoke(
+            "send-delivery-email",
+            {
+                body: {
+
+                    reference:
+                        String(
+                            record.reference_no
+                        ).padStart(
+                            4,
+                            "0"
+                        ),
+
+                    customer:
+                        record.customer_name,
+
+                    boxes:
+                        record.box_count,
+
+                    notes:
+                        record.notes || "",
+
+                    deliveryTime:
+                        new Date().toLocaleString(
+                            "en-GB",
+                            {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        )
+
+                }
+            }
+        );
+
+
+    if(
+        emailResult.error
+    ) {
+
+        message.textContent =
+            "Delivery confirmed, but the email notification could not be sent.";
+
+        console.error(
+            "Delivery email error:",
+            emailResult.error
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !emailResult.data ||
+        emailResult.data.success !== true
+    ) {
+
+        message.textContent =
+            "Delivery confirmed, but the email notification could not be sent.";
+
+        console.error(
+            "Delivery email failed:",
+            emailResult.data
+        );
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Delivery confirmed. MOOVIT has been notified by email.";
 
 }
 
