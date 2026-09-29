@@ -1196,49 +1196,188 @@ function viewRecord(id) {
             "0"
         );
 
-    alert(
-        "REFERENCE: " + reference +
-        "\n\n" +
+    const overlay =
+        document.createElement(
+            "div"
+        );
 
-        "CUSTOMER: " +
-        (record.customer_name || "-") +
+    overlay.id =
+        "viewRecordOverlay";
 
-        "\n\nTELEPHONE: " +
-        (record.telephone || "-") +
+    overlay.style.position =
+        "fixed";
 
-        "\n\nEMAIL: " +
-        (record.email || "-") +
+    overlay.style.top =
+        "0";
 
-        "\n\nADDRESS: " +
-        (record.address || "-") +
+    overlay.style.left =
+        "0";
 
-        "\n\nITEM CONTENTS: " +
-        (record.item_contents || "-") +
+    overlay.style.right =
+        "0";
 
-        "\n\nBOXES: " +
-        (record.box_count || "-") +
+    overlay.style.bottom =
+        "0";
 
-        "\n\nPAYMENT: €" +
-        (
-            record.payment_amount === null
-            ?
-            "0.00"
-            :
-            record.payment_amount
+    overlay.style.background =
+        "rgba(0,0,0,0.65)";
+
+    overlay.style.zIndex =
+        "9999";
+
+    overlay.style.display =
+        "flex";
+
+    overlay.style.alignItems =
+        "center";
+
+    overlay.style.justifyContent =
+        "center";
+
+    overlay.style.padding =
+        "20px";
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+    card.style.background =
+        "white";
+
+    card.style.width =
+        "100%";
+
+    card.style.maxWidth =
+        "600px";
+
+    card.style.maxHeight =
+        "90vh";
+
+    card.style.overflowY =
+        "auto";
+
+    card.style.borderRadius =
+        "12px";
+
+    card.style.padding =
+        "25px";
+
+    card.style.boxSizing =
+        "border-box";
+
+    card.style.boxShadow =
+        "0 10px 40px rgba(0,0,0,0.4)";
+
+    card.innerHTML =
+
+        '<h2 style="margin-top:0;">' +
+        'REFERENCE ' +
+        safe(reference) +
+        '</h2>' +
+
+        '<hr>' +
+
+        '<p><strong>CUSTOMER:</strong><br>' +
+        safe(record.customer_name || "-") +
+        '</p>' +
+
+        '<p><strong>TELEPHONE:</strong><br>' +
+        safe(record.telephone || "-") +
+        '</p>' +
+
+        '<p><strong>EMAIL:</strong><br>' +
+        safe(record.email || "-") +
+        '</p>' +
+
+        '<p><strong>ADDRESS:</strong><br>' +
+        safe(record.address || "-") +
+        '</p>' +
+
+        '<p><strong>ITEM CONTENTS:</strong><br>' +
+        safe(record.item_contents || "-") +
+        '</p>' +
+
+        '<p><strong>BOXES:</strong><br>' +
+        safe(record.box_count || "1") +
+        '</p>' +
+
+        '<p><strong>PAYMENT:</strong><br>€' +
+        safe(
+            record.payment_amount === null ||
+            record.payment_amount === undefined
+                ? "0.00"
+                : record.payment_amount
         ) +
+        '</p>' +
 
-        "\n\nPAYMENT DUE: " +
-        (record.payment_due || "-") +
+        '<p><strong>PAYMENT DUE:</strong><br>' +
+        safe(record.payment_due || "-") +
+        '</p>' +
 
-        "\n\nPAYMENT STATUS: " +
-        (record.payment_status || "-") +
+        '<p><strong>PAYMENT STATUS:</strong><br>' +
+        safe(record.payment_status || "-") +
+        '</p>' +
 
-        "\n\nDELIVERY STATUS: " +
-        (record.delivery_status || "-") +
+        '<p><strong>DELIVERY STATUS:</strong><br>' +
+        safe(record.delivery_status || "-") +
+        '</p>' +
 
-        "\n\nNOTES: " +
-        (record.notes || "-")
+        '<p><strong>NOTES:</strong><br>' +
+        safe(record.notes || "-") +
+        '</p>' +
+
+        '<hr>' +
+
+        '<div style="display:flex; gap:8px; flex-wrap:wrap;">' +
+
+        '<button ' +
+        'onclick="editRecord(\'' +
+        record.id +
+        '\'); closeViewRecord();"' +
+        '>' +
+        'EDIT' +
+        '</button>' +
+
+        '<button ' +
+        'onclick="showQR(\'' +
+        record.id +
+        '\'); closeViewRecord();"' +
+        '>' +
+        'QR / LABELS' +
+        '</button>' +
+
+        '<button ' +
+        'class="red" ' +
+        'onclick="closeViewRecord()"' +
+        '>' +
+        'CLOSE' +
+        '</button>' +
+
+        '</div>';
+
+    overlay.appendChild(
+        card
     );
+
+    document.body.appendChild(
+        overlay
+    );
+}
+
+
+function closeViewRecord() {
+
+    const overlay =
+        document.getElementById(
+            "viewRecordOverlay"
+        );
+
+    if(overlay) {
+
+        overlay.remove();
+
+    }
 
 }
     
