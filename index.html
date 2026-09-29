@@ -225,8 +225,19 @@ button:hover {
 }
 
 @media print {
+
+    @page {
+        size: 62mm auto;
+        margin: 0;
+    }
+
+    html,
     body {
-        background: white;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 62mm !important;
+        height: auto !important;
+        background: white !important;
     }
 
     body * {
@@ -242,11 +253,41 @@ button:hover {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
+        width: 62mm !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden;
     }
 
-    @page {
-        margin: 10mm;
+    .print-label {
+        width: 62mm !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 2mm !important;
+        text-align: center;
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .print-label img {
+        width: 50mm !important;
+        height: 50mm !important;
+    }
+
+    .print-label h1 {
+        font-size: 8mm;
+        margin: 1mm 0;
+    }
+
+    .print-label h2 {
+        font-size: 6mm;
+        margin: 1mm 0;
+    }
+
+    .print-label p {
+        font-size: 4mm;
+        margin: 1mm;
     }
 }
 </style>
