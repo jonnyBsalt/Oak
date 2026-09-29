@@ -226,49 +226,38 @@ button:hover {
 
 @media print {
 
-    @page {
-    size: 62mm 80mm;
-    margin: 0;
-}
-
-    html,
     body {
         margin: 0 !important;
         padding: 0 !important;
-        width: 62mm !important;
-        height: auto !important;
         background: white !important;
     }
 
-    body * {
-        visibility: hidden;
+    /* Completely remove everything except the print area */
+    body > * {
+        display: none !important;
     }
 
-    #printArea,
+    #printArea {
+        display: block !important;
+        position: static !important;
+        width: 62mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     #printArea * {
-        visibility: visible;
+        visibility: visible !important;
     }
 
-   #printArea {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 62mm !important;
-    height: 80mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden;
-}
-
-   .print-label {
-    width: 62mm !important;
-    height: 80mm !important;
-    margin: 0 !important;
-    padding: 2mm !important;
-    text-align: center;
-    page-break-after: always;
-    break-after: page;
-}
+    .print-label {
+        display: block !important;
+        width: 62mm !important;
+        margin: 0 !important;
+        padding: 2mm !important;
+        text-align: center;
+        page-break-after: always;
+        break-after: page;
+    }
 
     .print-label img {
         width: 50mm !important;
@@ -288,6 +277,10 @@ button:hover {
     .print-label p {
         font-size: 4mm;
         margin: 1mm;
+    }
+
+    @page {
+        margin: 0;
     }
 }
 </style>
