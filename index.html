@@ -1,409 +1,1757 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DEMO QR Generator</title>
+<title>IDENTIFY - Business Information & QR Management</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 
+* {
+
+    box-sizing: border-box;
+
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
+
     margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: #eef1f4;
+
+    color: #20252b;
+
+}
+
+.header {
+
+    background: #111;
+
+    color: white;
+
     padding: 20px;
+
+}
+
+.header h1 {
+
+    margin: 0;
+
+}
+
+.header p {
+
+    margin: 5px 0 0;
+
+    color: #bbb;
+
 }
 
 .container {
-    max-width: 520px;
+
+    max-width: 900px;
+
     margin: auto;
+
+    padding: 20px;
+
+}
+
+.card {
+
     background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.15);
-}
 
-.demo {
-    text-align: center;
-    color: #c00000;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-}
+    padding: 20px;
 
-h1 {
-    text-align: center;
-}
-
-.next {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
     margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+
+}
+
+h2 {
+
+    margin-top: 0;
+
+}
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+
+}
+
+@media(max-width:650px) {
+
+    .grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
 }
 
 label {
+
     display: block;
+
     font-weight: bold;
-    margin-top: 18px;
+
+    margin-top: 12px;
+
     margin-bottom: 6px;
+
 }
 
 input,
-textarea {
+
+textarea,
+
+select {
+
     width: 100%;
-    box-sizing: border-box;
+
     padding: 12px;
+
     border: 1px solid #ccc;
-    border-radius: 8px;
+
+    border-radius: 7px;
+
     font-size: 16px;
+
 }
 
 textarea {
-    height: 120px;
+
+    min-height: 90px;
+
 }
 
 button {
+
     width: 100%;
-    margin-top: 22px;
-    padding: 14px;
-    background: #111;
-    color: white;
+
+    padding: 13px;
+
+    margin-top: 16px;
+
     border: none;
-    border-radius: 8px;
-    font-size: 17px;
+
+    border-radius: 7px;
+
+    background: #111;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
 }
 
-.reset {
-    background: #c00000;
+button:hover {
+
+    opacity: 0.9;
+
 }
 
-#result {
-    margin-top: 25px;
+.logout {
+
+    float: right;
+
+    width: auto;
+
+    margin: 0;
+
+    padding: 8px 14px;
+
+}
+
+.danger {
+
+    background: #b00000;
+
+}
+
+.secondary {
+
+    background: #555;
+
+}
+
+.stat {
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+}
+
+.muted {
+
+    color: #777;
+
+}
+
+.center {
+
     text-align: center;
-}
 
-#qr {
-    margin: 20px auto;
-    display: flex;
-    justify-content: center;
 }
 
 .reference {
-    font-size: 24px;
+
+    font-size: 28px;
+
     font-weight: bold;
+
+    text-align: center;
+
 }
 
-.record {
-    text-align: left;
-    margin-top: 20px;
+#qr {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin: 25px;
+
 }
 
-.record label {
-    margin-top: 14px;
+.badge {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
 }
 
-.value {
-    padding: 12px;
+.paid {
+
+    background: #d8f2df;
+
+    color: #17652b;
+
+}
+
+.due {
+
+    background: #fff0c5;
+
+    color: #875600;
+
+}
+
+.overdue {
+
+    background: #ffdada;
+
+    color: #990000;
+
+}
+
+.row {
+
+    padding: 13px;
+
     background: #f5f5f5;
-    border: 1px solid #ddd;
+
     border-radius: 8px;
+
+    margin: 8px 0;
+
     white-space: pre-wrap;
+
 }
 
 .small {
+
     text-align: center;
+
     color: #777;
+
     font-size: 13px;
-    line-height: 1.5;
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+th,
+
+td {
+
+    text-align: left;
+
+    padding: 10px;
+
+    border-bottom: 1px solid #ddd;
+
 }
 
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="demo">
-DEMO
-</div>
-
-<h1>Create New Record</h1>
-
-<div class="next">
-Next Reference:
-<span id="nextNumber">0001</span>
-</div>
-
-<label>Name</label>
-<input id="name" placeholder="Enter name">
-
-<label>Address</label>
-<input id="address" placeholder="Enter address">
-
-<label>Item</label>
-<input id="item" placeholder="Enter item">
-
-<label>Notes</label>
-<textarea id="notes" placeholder="Enter notes"></textarea>
-
-<button onclick="generateQR()">
-Generate QR Code
-</button>
-
-<div id="result"></div>
-
-<div id="qr"></div>
-
-<button class="reset" onclick="resetDemo()">
-⚠️ RESET DEMO
-</button>
-
-<p class="small">
-⚠️ RESET WARNING<br>
-Resetting will remove the demo data stored by this browser
-and return the reference number to 0001.
-</p>
-
-<p class="small">
-DEMO SYSTEM — numbering starts at 0001
-</p>
-
-</div>
+<div id="app"></div>
 
 <script>
 
-function getNextNumber() {
+/* =========================
 
-    let number = localStorage.getItem("demoNextNumber");
+   DEMO DATABASE
 
-    if (!number) {
-        number = 1;
-    }
+========================= */
 
-    return parseInt(number);
-}
+const DATABASE =
 
+    "identifyDemoDatabase";
 
-function displayNextNumber() {
+const ADMIN_SESSION =
 
-    let number = getNextNumber();
+    "identifyDemoAdmin";
 
-    document.getElementById("nextNumber").textContent =
-        String(number).padStart(4, "0");
-}
+function loadRecords() {
 
+    return JSON.parse(
 
-function generateQR() {
+        localStorage.getItem(DATABASE) || "[]"
 
-    let number = getNextNumber();
-
-    let reference =
-        String(number).padStart(4, "0");
-
-    let name =
-        document.getElementById("name").value || "Sample";
-
-    let address =
-        document.getElementById("address").value || "Sample";
-
-    let item =
-        document.getElementById("item").value || "Sample";
-
-    let notes =
-        document.getElementById("notes").value || "Sample";
-
-
-    let data =
-        "ref=" + encodeURIComponent(reference) +
-        "&name=" + encodeURIComponent(name) +
-        "&address=" + encodeURIComponent(address) +
-        "&item=" + encodeURIComponent(item) +
-        "&notes=" + encodeURIComponent(notes);
-
-
-    let url =
-        "https://jonnybsalt.github.io/Oak/?" + data;
-
-
-    document.getElementById("qr").innerHTML = "";
-
-
-    new QRCode(
-        document.getElementById("qr"),
-        {
-            text: url,
-            width: 250,
-            height: 250
-        }
     );
 
+}
 
-    document.getElementById("result").innerHTML =
-        "<div class='reference'>DEMO " +
-        reference +
-        "</div>" +
-        "<p>QR code created successfully.</p>";
-
+function saveRecords(records) {
 
     localStorage.setItem(
-        "demoNextNumber",
-        number + 1
+
+        DATABASE,
+
+        JSON.stringify(records)
+
     );
 
-
-    displayNextNumber();
 }
 
+/* =========================
 
-function resetDemo() {
+   HELPERS
 
-    let firstWarning = confirm(
-        "⚠️ WARNING\n\n" +
-        "This will reset the DEMO system back to reference 0001.\n\n" +
-        "All demo data stored by this browser will be removed.\n\n" +
-        "This cannot be undone.\n\n" +
-        "Do you want to continue?"
-    );
-
-
-    if (!firstWarning) {
-        return;
-    }
-
-
-    let secondWarning = confirm(
-        "⚠️ FINAL WARNING\n\n" +
-        "Reset everything and start again at 0001?"
-    );
-
-
-    if (!secondWarning) {
-        return;
-    }
-
-
-    localStorage.removeItem("demoNextNumber");
-
-
-    alert(
-        "Demo system has been reset.\n\n" +
-        "The next reference will be 0001."
-    );
-
-
-    location.href =
-        "https://jonnybsalt.github.io/Oak/?reset=1";
-}
-
-
-/*
-   Display an individual record when
-   somebody scans a QR code.
-*/
-
-function showRecord() {
-
-    let params =
-        new URLSearchParams(window.location.search);
-
-
-    if (!params.has("ref")) {
-        return;
-    }
-
-
-    let reference =
-        params.get("ref") || "";
-
-    let name =
-        params.get("name") || "";
-
-    let address =
-        params.get("address") || "";
-
-    let item =
-        params.get("item") || "";
-
-    let notes =
-        params.get("notes") || "";
-
-
-    document.body.innerHTML = `
-
-    <div class="container">
-
-        <div class="demo">
-            DEMO
-        </div>
-
-        <div class="reference">
-            Reference: ${escapeHTML(reference)}
-        </div>
-
-        <h1>Information</h1>
-
-        <div class="record">
-
-            <label>Name</label>
-
-            <div class="value">
-                ${escapeHTML(name)}
-            </div>
-
-
-            <label>Address</label>
-
-            <div class="value">
-                ${escapeHTML(address)}
-            </div>
-
-
-            <label>Item</label>
-
-            <div class="value">
-                ${escapeHTML(item)}
-            </div>
-
-
-            <label>Notes</label>
-
-            <div class="value">
-                ${escapeHTML(notes)}
-            </div>
-
-        </div>
-
-    </div>
-
-    `;
-}
-
+========================= */
 
 function escapeHTML(text) {
 
-    return text
+    return String(text || "")
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 
 }
 
+function nextReference() {
 
-displayNextNumber();
+    const records = loadRecords();
 
-showRecord();
+    let highest = 0;
+
+    records.forEach(record => {
+
+        const number =
+
+            parseInt(record.reference);
+
+        if (number > highest) {
+
+            highest = number;
+
+        }
+
+    });
+
+    return String(highest + 1)
+
+        .padStart(4, "0");
+
+}
+
+function createID() {
+
+    if (crypto.randomUUID) {
+
+        return crypto.randomUUID()
+
+            .replaceAll("-", "")
+
+            .substring(0,16);
+
+    }
+
+    return Math.random()
+
+        .toString(36)
+
+        .substring(2,18);
+
+}
+
+/* =========================
+
+   PAYMENT STATUS
+
+========================= */
+
+function paymentStatus(record) {
+
+    if (record.paymentStatus === "paid") {
+
+        return [
+
+            "PAID",
+
+            "paid"
+
+        ];
+
+    }
+
+    if (!record.paymentDue) {
+
+        return [
+
+            "NO DUE DATE",
+
+            ""
+
+        ];
+
+    }
+
+    const today =
+
+        new Date();
+
+    today.setHours(
+
+        0,0,0,0
+
+    );
+
+    const due =
+
+        new Date(
+
+            record.paymentDue +
+
+            "T00:00:00"
+
+        );
+
+    if (due < today) {
+
+        return [
+
+            "OVERDUE",
+
+            "overdue"
+
+        ];
+
+    }
+
+    const difference =
+
+        Math.ceil(
+
+            (due - today) /
+
+            86400000
+
+        );
+
+    if (difference <= 7) {
+
+        return [
+
+            "DUE SOON",
+
+            "due"
+
+        ];
+
+    }
+
+    return [
+
+        "DUE " +
+
+        record.paymentDue,
+
+        "due"
+
+    ];
+
+}
+
+/* =========================
+
+   LOGIN
+
+========================= */
+
+function showLogin() {
+
+    document.getElementById("app")
+
+        .innerHTML = `
+
+        <div class="card"
+
+             style="max-width:500px;margin:70px auto">
+
+            <div class="center">
+
+                <h1>IDENTIFY</h1>
+
+                <p class="muted">
+
+                    Business Information & QR Management
+
+                </p>
+
+            </div>
+
+            <label>
+
+                Admin Password
+
+            </label>
+
+            <input
+
+                id="password"
+
+                type="password"
+
+                placeholder="Enter password"
+
+            >
+
+            <button onclick="login()">
+
+                Login
+
+            </button>
+
+            <p class="small">
+
+                DEMO password:
+
+                <b>admin123</b>
+
+            </p>
+
+        </div>
+
+        `;
+
+}
+
+function login() {
+
+    const password =
+
+        document.getElementById("password")
+
+            .value;
+
+    if (password === "admin123") {
+
+        sessionStorage.setItem(
+
+            ADMIN_SESSION,
+
+            "true"
+
+        );
+
+        showDashboard();
+
+    } else {
+
+        alert(
+
+            "Incorrect password."
+
+        );
+
+    }
+
+}
+
+function logout() {
+
+    sessionStorage.removeItem(
+
+        ADMIN_SESSION
+
+    );
+
+    showLogin();
+
+}
+
+/* =========================
+
+   DASHBOARD
+
+========================= */
+
+function showDashboard() {
+
+    const records =
+
+        loadRecords();
+
+    let paid = 0;
+
+    let due = 0;
+
+    let overdue = 0;
+
+    records.forEach(record => {
+
+        const status =
+
+            paymentStatus(record);
+
+        if (status[0] === "PAID") {
+
+            paid++;
+
+        }
+
+        if (
+
+            status[1] === "due"
+
+        ) {
+
+            due++;
+
+        }
+
+        if (
+
+            status[1] === "overdue"
+
+        ) {
+
+            overdue++;
+
+        }
+
+    });
+
+    document.getElementById("app")
+
+        .innerHTML = `
+
+        <div class="header">
+
+            <div class="container">
+
+                <button
+
+                    class="logout"
+
+                    onclick="logout()">
+
+                    Logout
+
+                </button>
+
+                <h1>
+
+                    IDENTIFY
+
+                </h1>
+
+                <p>
+
+                    Business Information & QR Management
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="container">
+
+            <div class="grid">
+
+                <div class="card">
+
+                    <div class="muted">
+
+                        Records
+
+                    </div>
+
+                    <div class="stat">
+
+                        ${records.length}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="muted">
+
+                        Paid
+
+                    </div>
+
+                    <div class="stat">
+
+                        ${paid}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="muted">
+
+                        Due Soon
+
+                    </div>
+
+                    <div class="stat">
+
+                        ${due}
+
+                    </div>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="muted">
+
+                        Overdue
+
+                    </div>
+
+                    <div class="stat">
+
+                        ${overdue}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+
+                    Create Customer / Record
+
+                </h2>
+
+                <div class="grid">
+
+                    <div>
+
+                        <label>
+
+                            Customer Name
+
+                        </label>
+
+                        <input
+
+                            id="customerName"
+
+                            placeholder="John Smith"
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Telephone
+
+                        </label>
+
+                        <input
+
+                            id="telephone"
+
+                            placeholder="+34..."
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Email
+
+                        </label>
+
+                        <input
+
+                            id="email"
+
+                            placeholder="customer@email.com"
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Address
+
+                        </label>
+
+                        <input
+
+                            id="address"
+
+                            placeholder="Customer address"
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Item / Box / Asset
+
+                        </label>
+
+                        <input
+
+                            id="item"
+
+                            placeholder="Box, equipment, vehicle..."
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Payment Amount (€)
+
+                        </label>
+
+                        <input
+
+                            id="amount"
+
+                            type="number"
+
+                            step="0.01"
+
+                            placeholder="120.00"
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Payment Due
+
+                        </label>
+
+                        <input
+
+                            id="paymentDue"
+
+                            type="date"
+
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Payment Status
+
+                        </label>
+
+                        <select id="paymentStatus">
+
+                            <option value="unpaid">
+
+                                Unpaid
+
+                            </option>
+
+                            <option value="paid">
+
+                                Paid
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <label>
+
+                    Notes
+
+                </label>
+
+                <textarea
+
+                    id="notes"
+
+                    placeholder="Additional information">
+
+                </textarea>
+
+                <button
+
+                    onclick="createRecord()">
+
+                    Create Record + QR Code
+
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>
+
+                    Records
+
+                </h2>
+
+                ${
+
+                    records.length === 0
+
+                    ?
+
+                    "<p class='muted'>No records yet.</p>"
+
+                    :
+
+                    `
+
+                    <div style="overflow:auto">
+
+                    <table>
+
+                    <tr>
+
+                        <th>
+
+                            Reference
+
+                        </th>
+
+                        <th>
+
+                            Customer
+
+                        </th>
+
+                        <th>
+
+                            Item
+
+                        </th>
+
+                        <th>
+
+                            Payment
+
+                        </th>
+
+                        <th>
+
+                        </th>
+
+                    </tr>
+
+                    ${
+
+                        records.map(record => {
+
+                            const status =
+
+                                paymentStatus(record);
+
+                            return `
+
+                            <tr>
+
+                                <td>
+
+                                    <b>
+
+                                    ${record.reference}
+
+                                    </b>
+
+                                </td>
+
+                                <td>
+
+                                    ${escapeHTML(
+
+                                        record.customerName
+
+                                    )}
+
+                                </td>
+
+                                <td>
+
+                                    ${escapeHTML(
+
+                                        record.item
+
+                                    )}
+
+                                </td>
+
+                                <td>
+
+                                    <span
+
+                                        class="badge ${status[1]}">
+
+                                        ${status[0]}
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button
+
+                                        onclick="showQR(
+
+                                            '${record.id}'
+
+                                        )">
+
+                                        QR
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+                            `;
+
+                        }).join("")
+
+                    }
+
+                    </table>
+
+                    </div>
+
+                    `
+
+                }
+
+                <button
+
+                    class="danger"
+
+                    onclick="resetDemo()">
+
+                    ⚠️ RESET DEMO DATA
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+}
+
+/* =========================
+
+   CREATE RECORD
+
+========================= */
+
+function createRecord() {
+
+    const customerName =
+
+        document.getElementById(
+
+            "customerName"
+
+        ).value.trim();
+
+    const item =
+
+        document.getElementById(
+
+            "item"
+
+        ).value.trim();
+
+    if (!customerName || !item) {
+
+        alert(
+
+            "Please enter a customer name and item/box."
+
+        );
+
+        return;
+
+    }
+
+    const record = {
+
+        reference:
+
+            nextReference(),
+
+        id:
+
+            createID(),
+
+        customerName:
+
+            customerName,
+
+        telephone:
+
+            document.getElementById(
+
+                "telephone"
+
+            ).value,
+
+        email:
+
+            document.getElementById(
+
+                "email"
+
+            ).value,
+
+        address:
+
+            document.getElementById(
+
+                "address"
+
+            ).value,
+
+        item:
+
+            item,
+
+        amount:
+
+            document.getElementById(
+
+                "amount"
+
+            ).value,
+
+        paymentDue:
+
+            document.getElementById(
+
+                "paymentDue"
+
+            ).value,
+
+        paymentStatus:
+
+            document.getElementById(
+
+                "paymentStatus"
+
+            ).value,
+
+        notes:
+
+            document.getElementById(
+
+                "notes"
+
+            ).value
+
+    };
+
+    const records =
+
+        loadRecords();
+
+    records.push(record);
+
+    saveRecords(records);
+
+    showQR(record.id);
+
+}
+
+/* =========================
+
+   QR CODE
+
+========================= */
+
+function showQR(id) {
+
+    const records =
+
+        loadRecords();
+
+    const record =
+
+        records.find(
+
+            x => x.id === id
+
+        );
+
+    const url =
+
+        location.origin +
+
+        location.pathname +
+
+        "?id=" +
+
+        encodeURIComponent(id);
+
+    document.getElementById("app")
+
+        .innerHTML = `
+
+        <div class="card"
+
+             style="max-width:600px;margin:40px auto">
+
+            <div class="center">
+
+                <h1>
+
+                    QR CODE CREATED
+
+                </h1>
+
+                <div class="reference">
+
+                    REFERENCE
+
+                    ${record.reference}
+
+                </div>
+
+            </div>
+
+            <div id="qr"></div>
+
+            <div class="center">
+
+                <p>
+
+                    <b>
+
+                        ${escapeHTML(
+
+                            record.customerName
+
+                        )}
+
+                    </b>
+
+                    <br>
+
+                    ${escapeHTML(
+
+                        record.item
+
+                    )}
+
+                </p>
+
+                <p class="small">
+
+                    Scan this QR code with any
+
+                    mobile phone.
+
+                    No admin login is required
+
+                    to view the record.
+
+                </p>
+
+                <button
+
+                    onclick="showDashboard()">
+
+                    Back to Dashboard
+
+                </button>
+
+                <button
+
+                    class="secondary"
+
+                    onclick="location.href='${url}'">
+
+                    Test QR Scan
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    new QRCode(
+
+        document.getElementById("qr"),
+
+        {
+
+            text:
+
+                url,
+
+            width:
+
+                250,
+
+            height:
+
+                250
+
+        }
+
+    );
+
+}
+
+/* =========================
+
+   QR SCAN VIEW
+
+========================= */
+
+function showScan(id) {
+
+    const records =
+
+        loadRecords();
+
+    const record =
+
+        records.find(
+
+            x => x.id === id
+
+        );
+
+    if (!record) {
+
+        document.getElementById("app")
+
+            .innerHTML = `
+
+            <div class="card">
+
+                <h1>
+
+                    Record Not Found
+
+                </h1>
+
+                <p>
+
+                    This QR code does not
+
+                    correspond to a record.
+
+                </p>
+
+            </div>
+
+            `;
+
+        return;
+
+    }
+
+    const status =
+
+        paymentStatus(record);
+
+    document.getElementById("app")
+
+        .innerHTML = `
+
+        <div class="card"
+
+             style="max-width:600px;margin:40px auto">
+
+            <div class="center">
+
+                <h1>
+
+                    IDENTIFY
+
+                </h1>
+
+                <div class="reference">
+
+                    REFERENCE
+
+                    ${record.reference}
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Customer
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.customerName
+
+                )}
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Item / Box / Asset
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.item
+
+                )}
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Address
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.address
+
+                )}
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Telephone
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.telephone
+
+                )}
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Email
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.email
+
+                )}
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Payment
+
+                </b>
+
+                <br>
+
+                <span
+
+                    class="badge ${status[1]}">
+
+                    ${status[0]}
+
+                </span>
+
+                ${
+
+                    record.amount
+
+                    ?
+
+                    " — €" +
+
+                    escapeHTML(
+
+                        record.amount
+
+                    )
+
+                    :
+
+                    ""
+
+                }
+
+            </div>
+
+            <div class="row">
+
+                <b>
+
+                    Notes
+
+                </b>
+
+                <br>
+
+                ${escapeHTML(
+
+                    record.notes
+
+                )}
+
+            </div>
+
+            <p class="small">
+
+                QR identification view.
+
+                No login required.
+
+            </p>
+
+        </div>
+
+        `;
+
+}
+
+/* =========================
+
+   RESET
+
+========================= */
+
+function resetDemo() {
+
+    const first =
+
+        confirm(
+
+            "WARNING\n\n" +
+
+            "This will delete all DEMO records " +
+
+            "stored in this browser.\n\n" +
+
+            "Continue?"
+
+        );
+
+    if (!first) {
+
+        return;
+
+    }
+
+    const second =
+
+        confirm(
+
+            "FINAL WARNING\n\n" +
+
+            "Reset all prototype data?"
+
+        );
+
+    if (!second) {
+
+        return;
+
+    }
+
+    localStorage.removeItem(
+
+        DATABASE
+
+    );
+
+    showDashboard();
+
+}
+
+/* =========================
+
+   START
+
+========================= */
+
+const params =
+
+    new URLSearchParams(
+
+        window.location.search
+
+    );
+
+if (params.has("id")) {
+
+    showScan(
+
+        params.get("id")
+
+    );
+
+} else {
+
+    if (
+
+        sessionStorage.getItem(
+
+            ADMIN_SESSION
+
+        ) === "true"
+
+    ) {
+
+        showDashboard();
+
+    } else {
+
+        showLogin();
+
+    }
+
+}
 
 </script>
 
 </body>
+
 </html>
