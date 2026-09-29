@@ -291,6 +291,69 @@ button:hover {
     }
 }
 
+.delivery-sheet {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 15mm;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: white;
+    color: black;
+    text-align: left;
+}
+
+.delivery-sheet h1 {
+    text-align: center;
+    font-size: 28px;
+    margin: 0 0 20px;
+}
+
+.delivery-sheet h2 {
+    font-size: 20px;
+    margin: 15px 0 8px;
+}
+
+.delivery-sheet .sheet-line {
+    border-bottom: 1px solid #999;
+    min-height: 28px;
+    margin-bottom: 8px;
+}
+
+.delivery-sheet .box-check {
+    font-size: 18px;
+    padding: 7px 0;
+}
+
+.delivery-sheet .notes-area {
+    border: 1px solid #999;
+    min-height: 80px;
+    padding: 10px;
+}
+
+.delivery-sheet .signature-area {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.delivery-sheet .signature {
+    flex: 1;
+    border-top: 1px solid #000;
+    padding-top: 8px;
+}
+
+@media print {
+
+    .delivery-sheet {
+        display: block !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        padding: 15mm !important;
+        margin: 0 !important;
+        page-break-after: always;
+        break-after: page;
+    }    
+    
 @media print {
 
     body {
@@ -2549,7 +2612,19 @@ async function displayScan(
 
         '<div style="margin-top:20px">' +
 
-        '<button class="green" ' +
+'<button ' +
+
+'onclick="printDeliverySheet(&quot;' +
+safe(token) +
+'&quot;)"' +
+
+'>' +
+
+'PRINT DELIVERY CHECK SHEET' +
+
+'</button>' +
+
+'<button class="green" ' +
 
 'onclick="confirmDelivery(&quot;' +
 safe(token) +
@@ -2561,7 +2636,7 @@ safe(token) +
 
 '</button>' +
 
-        '</div>' +
+'</div>' +
 
         '<p id="deliveryMessage" ' +
 
@@ -2571,6 +2646,131 @@ safe(token) +
 
 }
 
+/* -------------------------
+   PRINT DELIVERY CHECK SHEET
+------------------------- */
+
+async function printDeliverySheet(
+    token
+) {
+
+    const result =
+        await supabaseClient
+            .rpc(
+                "get_moovit_qr_record",
+                {
+                    p_qr_token:
+                        token
+                }
+            );
+
+    if(
+        result.error ||
+        !result.data ||
+        !result.data.length
+    ) {
+
+        alert(
+            "Could not load delivery information."
+        );
+
+        return;
+
+    }
+
+    const record =
+        result.data[0];
+
+    const reference =
+        String(
+            record.reference_no
+        ).padStart(
+            4,
+            "0"
+        );
+
+    let boxesHtml = "";
+
+    for(
+        let i = 1;
+        i <= record.box_count;
+        i++
+    ) {
+
+        boxesHtml +=
+
+            '<div class="box-check">' +
+
+            '☐ Box ' +
+            i +
+            ' of ' +
+            record.box_count +
+
+            '</div>';
+
+    }
+
+    document
+        .getElementById(
+            "printArea"
+        )
+        .innerHTML =
+
+        '<div class="delivery-sheet">' +
+
+        '<h1>MOOVIT</h1>' +
+
+        '<h2>DELIVERY CHECK SHEET</h2>' +
+
+        '<p><strong>REFERENCE:</strong> ' +
+        safe(reference) +
+        '</p>' +
+
+        '<p><strong>CUSTOMER:</strong> ' +
+        safe(record.customer_name || "-") +
+        '</p>' +
+
+        '<p><strong>ADDRESS:</strong><br>' +
+        safe(record.address || "-") +
+        '</p>' +
+
+        '<p><strong>ITEM / CONTENTS:</strong><br>' +
+        safe(record.item_contents || "-") +
+        '</p>' +
+
+        '<p><strong>DATE:</strong> ____________________</p>' +
+
+        '<p><strong>DRIVER:</strong> ____________________</p>' +
+
+        '<h2>BOX CHECK</h2>' +
+
+        boxesHtml +
+
+        '<div class="box-check">' +
+        '☐ ALL BOXES PHYSICALLY CHECKED' +
+        '</div>' +
+
+        '<h2>DELIVERY NOTES</h2>' +
+
+        '<div class="notes-area"></div>' +
+
+        '<div class="signature-area">' +
+
+        '<div class="signature">' +
+        'Driver Signature' +
+        '</div>' +
+
+        '<div class="signature">' +
+        'Customer Signature' +
+        '</div>' +
+
+        '</div>' +
+
+        '</div>';
+
+    window.print();
+
+}    
 
 /* -------------------------
    CONFIRM DELIVERY
