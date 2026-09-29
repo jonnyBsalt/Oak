@@ -1709,6 +1709,12 @@ record.id +
 'EDIT' +
 '</button>' +
 
+'<button onclick="printDeliverySheet(\'' +
+safe(record.qr_token) +
+'\')">' +
+'PRINT CHECK SHEET' +
+'</button>' +
+
 '<button onclick="showQR(\'' +
 record.id +
 '\')">' +
@@ -2611,18 +2617,6 @@ async function displayScan(
         '</div>' +
 
         '<div style="margin-top:20px">' +
-
-'<button ' +
-
-'onclick="printDeliverySheet(&quot;' +
-safe(token) +
-'&quot;)"' +
-
-'>' +
-
-'PRINT DELIVERY CHECK SHEET' +
-
-'</button>' +
 
 '<button class="green" ' +
 
