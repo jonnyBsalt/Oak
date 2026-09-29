@@ -1171,6 +1171,77 @@ async function createRecord() {
 
 }
 
+    /* -------------------------
+   VIEW RECORD
+------------------------- */
+
+function viewRecord(id) {
+
+    const record =
+        records.find(
+            function(r) {
+                return r.id === id;
+            }
+        );
+
+    if(!record) {
+        return;
+    }
+
+    const reference =
+        String(
+            record.reference_no
+        ).padStart(
+            4,
+            "0"
+        );
+
+    alert(
+        "REFERENCE: " + reference +
+        "\n\n" +
+
+        "CUSTOMER: " +
+        (record.customer_name || "-") +
+
+        "\n\nTELEPHONE: " +
+        (record.telephone || "-") +
+
+        "\n\nEMAIL: " +
+        (record.email || "-") +
+
+        "\n\nADDRESS: " +
+        (record.address || "-") +
+
+        "\n\nITEM CONTENTS: " +
+        (record.item_contents || "-") +
+
+        "\n\nBOXES: " +
+        (record.box_count || "-") +
+
+        "\n\nPAYMENT: €" +
+        (
+            record.payment_amount === null
+            ?
+            "0.00"
+            :
+            record.payment_amount
+        ) +
+
+        "\n\nPAYMENT DUE: " +
+        (record.payment_due || "-") +
+
+        "\n\nPAYMENT STATUS: " +
+        (record.payment_status || "-") +
+
+        "\n\nDELIVERY STATUS: " +
+        (record.delivery_status || "-") +
+
+        "\n\nNOTES: " +
+        (record.notes || "-")
+    );
+
+}
+    
 /* -------------------------
    EDIT RECORD
 ------------------------- */
@@ -1415,7 +1486,13 @@ function displayRecords() {
 
                 '<div class="client-actions">' +
 
-                    '<button onclick="editRecord(\'' +
+'<button onclick="viewRecord(\'' +
+record.id +
+'\')">' +
+'VIEW' +
+'</button>' +
+
+'<button onclick="editRecord(\'' +
 record.id +
 '\')">' +
 'EDIT' +
