@@ -1618,8 +1618,17 @@ function displayRecords() {
                     '</span>' +
 
                     '<span class="client-name">' +
-                        safe(record.customer_name) +
-                    '</span>' +
+    safe(record.customer_name) +
+
+    (
+        record.payment_status === "Paid"
+        ?
+        ' <span style="color:green;font-weight:bold;">✓ PAID</span>'
+        :
+        ''
+    ) +
+
+'</span>' +
 
                 '</div>' +
 
