@@ -1031,11 +1031,45 @@ function displayRecords() {
             "records"
         );
 
+    const searchInput =
+        document.getElementById(
+            "clientSearch"
+        );
+
+    const search =
+        searchInput
+        ?
+        searchInput.value
+            .trim()
+            .toLowerCase()
+        :
+        "";
+
+    const filteredRecords =
+        records.filter(
+            function(record) {
+
+                return String(
+                    record.customer_name || ""
+                )
+                .toLowerCase()
+                .includes(search);
+
+            }
+        );
 
     container.innerHTML = "";
 
+    if(!filteredRecords.length) {
 
-    records.forEach(
+        container.innerHTML =
+            "<p>No clients found.</p>";
+
+        return;
+
+    }
+
+    filteredRecords.forEach(
         function(record) {
 
             const div =
@@ -1043,10 +1077,8 @@ function displayRecords() {
                     "div"
                 );
 
-
             div.className =
-                "record";
-
+                "record client-row";
 
             const reference =
                 String(
@@ -1056,62 +1088,35 @@ function displayRecords() {
                     "0"
                 );
 
-
             div.innerHTML =
 
-                "<strong>Reference:</strong> " +
-                safe(reference) +
-                "<br>" +
+                '<div class="client-main">' +
 
-                "<strong>Customer:</strong> " +
-                safe(
-                    record.customer_name
-                ) +
-                "<br>" +
+                    '<span class="client-ref">' +
+                        safe(reference) +
+                    '</span>' +
 
-                "<strong>Item:</strong> " +
-                safe(
-                    record.item_contents
-                ) +
-                "<br>" +
+                    '<span class="client-name">' +
+                        safe(record.customer_name) +
+                    '</span>' +
 
-                "<strong>Boxes:</strong> " +
-                safe(
-                    record.box_count
-                ) +
-                "<br>" +
+                '</div>' +
 
-                "<strong>Payment:</strong> €" +
-                safe(
-                    record.payment_amount === null
-                    ?
-                    "0.00"
-                    :
-                    record.payment_amount
-                ) +
-                "<br>" +
+                '<div class="client-actions">' +
 
-                "<strong>Expiry:</strong> " +
-                safe(
-                    record.payment_due || "-"
-                ) +
-                "<br>" +
+                    '<button onclick="showQR(\'' +
+                        record.id +
+                    '\')">' +
+                        'QR / LABELS' +
+                    '</button>' +
 
-                "<strong>Status:</strong> " +
-                safe(
-                    record.payment_status
-                ) +
+                    '<button class="red" onclick="archiveRecord(\'' +
+                        record.id +
+                    '\')">' +
+                        'ARCHIVE' +
+                    '</button>' +
 
-                "<br><br>" +
-
-                "<button onclick=\"showQR('" +
-                record.id +
-                "')\">" +
-
-                "QR / LABELS" +
-
-                "</button>";
-
+                '</div>';
 
             container.appendChild(
                 div
@@ -1119,6 +1124,13 @@ function displayRecords() {
 
         }
     );
+
+}
+
+
+function filterRecords() {
+
+    displayRecords();
 
 }
 
