@@ -599,25 +599,23 @@ button:hover {
 
     <!-- QR -->
 
-    <!-- CLIENT LIST NAVIGATION -->
-
-<button
-    onclick="showClientList()"
-    style="margin-bottom:20px;"
+<div
+    id="qrCard"
+    class="card hidden"
 >
-    ← BACK TO CLIENT LIST
-</button>
 
-    <div
-        id="qrCard"
-        class="card hidden"
+    <button
+        onclick="showClientList()"
+        style="margin-bottom:20px;"
     >
+        ← BACK TO CLIENT LIST
+    </button>
 
-        <h2>
-            QR Label
-        </h2>
+    <h2>
+        QR Label
+    </h2>
 
-        <div id="qrInfo"></div>
+    <div id="qrInfo"></div>
 
         <label>
             Box
@@ -1273,10 +1271,16 @@ function showClientList() {
         .classList.add("hidden");
 
     document
-        .getElementById("records")
+        .getElementById("recordsCard")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("recordsCard")
         .scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
+            block: "start"
         });
+
 }
 
 /* -------------------------
@@ -1351,6 +1355,22 @@ function showQR(id) {
             "hidden"
         );
 
+    document
+        .getElementById(
+            "recordsCard"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+    document
+        .getElementById(
+            "qrCard"
+        )
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
     document
         .getElementById(
