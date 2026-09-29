@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MOOVIT QR Management</title>
+<title>MOOVIT</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -30,7 +31,7 @@ header {
 .logo {
     font-size: 32px;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 }
 
 .container {
@@ -40,14 +41,16 @@ header {
 }
 
 .card {
-    background: white;
+    background: #fff;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     margin-top: 0;
 }
 
@@ -81,24 +84,24 @@ button {
     margin: 4px;
 }
 
-.btn-primary {
+.btn-orange {
     background: #ff6600;
-    color: white;
+    color: #fff;
 }
 
-.btn-dark {
+.btn-black {
     background: #000;
-    color: white;
+    color: #fff;
 }
 
 .btn-green {
     background: #168a35;
-    color: white;
+    color: #fff;
 }
 
 .btn-red {
     background: #c62828;
-    color: white;
+    color: #fff;
 }
 
 .btn-grey {
@@ -110,23 +113,26 @@ button {
     display: none !important;
 }
 
+
 /* LOGIN */
 
 .login-box {
     max-width: 450px;
     margin: 70px auto;
-    background: white;
+    background: #fff;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 5px 20px rgba(0,0,0,.12);
 }
 
 .login-title {
     text-align: center;
-    font-size: 36px;
+    font-size: 38px;
     font-weight: bold;
+    letter-spacing: 3px;
     margin-bottom: 25px;
 }
+
 
 /* DASHBOARD */
 
@@ -138,11 +144,11 @@ button {
 }
 
 .stat {
-    background: white;
+    background: #fff;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    box-shadow: 0 3px 10px rgba(0,0,0,.07);
 }
 
 .stat-number {
@@ -153,6 +159,7 @@ button {
 .stat-label {
     color: #666;
 }
+
 
 /* TABLE */
 
@@ -174,27 +181,13 @@ td {
 
 th {
     background: #000;
-    color: white;
+    color: #fff;
 }
 
-.status-paid {
-    color: green;
-    font-weight: bold;
-}
 
-.status-due {
-    color: #d68a00;
-    font-weight: bold;
-}
+/* LABEL */
 
-.status-overdue {
-    color: red;
-    font-weight: bold;
-}
-
-/* QR LABEL */
-
-.label-wrapper {
+.label-area {
     text-align: center;
 }
 
@@ -202,7 +195,7 @@ th {
     width: 400px;
     max-width: 100%;
     margin: 20px auto;
-    background: white;
+    background: #fff;
     border: 4px solid #000;
     padding: 20px;
     text-align: left;
@@ -224,40 +217,76 @@ th {
     margin-bottom: 3px;
 }
 
-#qrPreview {
+.box-number {
     text-align: center;
-    margin: 20px 0;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 15px 0;
 }
 
-#qrPreview canvas,
-#qrPreview img {
+.qr-code {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.qr-code img,
+.qr-code canvas {
     max-width: 100%;
 }
 
+
+/* BOX SELECTOR */
+
+.box-selector {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin: 15px 0;
+}
+
+.box-selector button {
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+
+/* SCAN */
+
 .scan-title {
     text-align: center;
-    font-size: 30px;
+    font-size: 34px;
+    font-weight: bold;
+    letter-spacing: 3px;
     margin-bottom: 20px;
 }
 
+.scan-box {
+    border: 3px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+}
+
 .scan-field {
-    padding: 12px 0;
+    padding: 13px 0;
     border-bottom: 1px solid #ddd;
+    font-size: 17px;
 }
 
 .scan-field strong {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .scan-status {
+    text-align: center;
     font-size: 22px;
     font-weight: bold;
-    text-align: center;
     padding: 15px;
-    margin: 15px 0;
     border-radius: 8px;
+    margin-bottom: 15px;
 }
+
 
 /* PRINT */
 
@@ -267,12 +296,12 @@ th {
         visibility: hidden;
     }
 
-    #labelArea,
-    #labelArea * {
+    #printArea,
+    #printArea * {
         visibility: visible;
     }
 
-    #labelArea {
+    #printArea {
         position: absolute;
         left: 0;
         top: 0;
@@ -284,12 +313,13 @@ th {
     }
 
     .qr-label {
+        page-break-after: always;
         width: 90mm;
         margin: 0 auto;
         border: 2px solid #000;
-        box-shadow: none;
     }
 }
+
 
 /* MOBILE */
 
@@ -310,18 +340,29 @@ th {
     table {
         font-size: 14px;
     }
+
 }
+
 </style>
 </head>
 
+
 <body>
 
+
 <header>
-    <div class="logo">MOOVIT</div>
+
+    <div class="logo">
+        MOOVIT
+    </div>
+
 </header>
 
 
-<!-- ================= LOGIN ================= -->
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div id="loginScreen">
 
@@ -332,10 +373,12 @@ th {
         </div>
 
         <p style="text-align:center;">
-            Administration Login
+            Admin Login
         </p>
 
-        <label>Password</label>
+        <label>
+            Password
+        </label>
 
         <input
             type="password"
@@ -344,7 +387,7 @@ th {
         >
 
         <button
-            class="btn-primary"
+            class="btn-orange"
             style="width:100%;"
             onclick="login()"
         >
@@ -361,21 +404,39 @@ th {
 </div>
 
 
-<!-- ================= ADMIN ================= -->
+
+<!-- =====================================================
+     ADMIN
+===================================================== -->
 
 <div id="adminScreen" class="hidden">
 
     <div class="container">
 
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+
+        <div
+            style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            "
+        >
 
             <div>
-                <h1>MOOVIT Dashboard</h1>
-                <p>QR Record Management System</p>
+
+                <h1>
+                    MOOVIT Admin
+                </h1>
+
+                <p>
+                    Customer & QR Management
+                </p>
+
             </div>
 
             <button
-                class="btn-dark"
+                class="btn-black"
                 onclick="logout()"
             >
                 Logout
@@ -384,67 +445,90 @@ th {
         </div>
 
 
-        <!-- STATS -->
+
+        <!-- DASHBOARD -->
 
         <div class="dashboard-grid">
 
             <div class="stat">
+
                 <div
                     class="stat-number"
                     id="recordCount"
-                >0</div>
+                >
+                    0
+                </div>
 
                 <div class="stat-label">
                     Records
                 </div>
+
             </div>
 
 
             <div class="stat">
+
                 <div
                     class="stat-number"
                     id="paidCount"
-                >0</div>
+                >
+                    0
+                </div>
 
                 <div class="stat-label">
                     Paid
                 </div>
+
             </div>
 
 
             <div class="stat">
+
                 <div
                     class="stat-number"
                     id="dueCount"
-                >0</div>
+                >
+                    0
+                </div>
 
                 <div class="stat-label">
                     Due Soon
                 </div>
+
             </div>
 
 
             <div class="stat">
+
                 <div
                     class="stat-number"
                     id="overdueCount"
-                >0</div>
+                >
+                    0
+                </div>
 
                 <div class="stat-label">
                     Overdue
                 </div>
+
             </div>
 
         </div>
+
 
 
         <!-- CREATE RECORD -->
 
         <div class="card">
 
-            <h2>Create Customer / Record</h2>
+            <h2>
+                Create Customer / Storage Record
+            </h2>
 
-            <label>Customer Name</label>
+
+            <label>
+                Customer Name
+            </label>
 
             <input
                 id="customer"
@@ -452,7 +536,9 @@ th {
             >
 
 
-            <label>Telephone</label>
+            <label>
+                Telephone
+            </label>
 
             <input
                 id="telephone"
@@ -460,7 +546,9 @@ th {
             >
 
 
-            <label>Email</label>
+            <label>
+                Email
+            </label>
 
             <input
                 id="email"
@@ -469,23 +557,42 @@ th {
             >
 
 
-            <label>Address</label>
+            <label>
+                Address
+            </label>
 
             <textarea
                 id="address"
-                placeholder="Address"
+                placeholder="Customer address"
             ></textarea>
 
 
-            <label>Item / Box / Asset</label>
+            <label>
+                Item / Contents
+            </label>
 
             <input
                 id="item"
-                placeholder="Item / contents / asset"
+                placeholder="Contents of storage"
             >
 
 
-            <label>Payment Amount (€)</label>
+            <label>
+                Number of Boxes
+            </label>
+
+            <input
+                id="boxCount"
+                type="number"
+                min="1"
+                value="1"
+                placeholder="Number of boxes"
+            >
+
+
+            <label>
+                Payment Amount (€)
+            </label>
 
             <input
                 id="amount"
@@ -495,7 +602,9 @@ th {
             >
 
 
-            <label>Payment Due</label>
+            <label>
+                Payment Due / Expiry Date
+            </label>
 
             <input
                 id="dueDate"
@@ -503,7 +612,9 @@ th {
             >
 
 
-            <label>Payment Status</label>
+            <label>
+                Payment Status
+            </label>
 
             <select id="paymentStatus">
 
@@ -518,7 +629,9 @@ th {
             </select>
 
 
-            <label>Notes</label>
+            <label>
+                Notes
+            </label>
 
             <textarea
                 id="notes"
@@ -527,7 +640,7 @@ th {
 
 
             <button
-                class="btn-primary"
+                class="btn-orange"
                 onclick="createRecord()"
             >
                 Create Record & Generate QR
@@ -536,11 +649,14 @@ th {
         </div>
 
 
+
         <!-- RECORDS -->
 
         <div class="card">
 
-            <h2>Existing Records</h2>
+            <h2>
+                Existing Records
+            </h2>
 
             <div class="table-wrap">
 
@@ -549,11 +665,27 @@ th {
                     <thead>
 
                         <tr>
-                            <th>Ref</th>
-                            <th>Customer</th>
-                            <th>Item</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+
+                            <th>
+                                Ref
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Boxes
+                            </th>
+
+                            <th>
+                                Payment
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
                         </tr>
 
                     </thead>
@@ -567,11 +699,14 @@ th {
         </div>
 
 
+
         <!-- RESET -->
 
         <div class="card">
 
-            <h3>Demo Controls</h3>
+            <h3>
+                Demo Controls
+            </h3>
 
             <button
                 class="btn-red"
@@ -587,76 +722,161 @@ th {
 </div>
 
 
-<!-- ================= QR LABEL ================= -->
+
+<!-- =====================================================
+     QR LABEL
+===================================================== -->
 
 <div id="qrScreen" class="hidden">
 
     <div class="container">
 
-        <div class="card label-wrapper">
+        <div class="card">
 
-            <div id="labelArea">
 
-                <div class="qr-label">
+            <div
+                id="printArea"
+                class="label-area"
+            >
 
-                    <h2>MOOVIT</h2>
+                <div
+                    id="singleLabel"
+                    class="qr-label"
+                >
+
+                    <h2>
+                        MOOVIT
+                    </h2>
+
 
                     <div class="label-line">
-                        <strong>Customer:</strong>
+
+                        <strong>
+                            Customer:
+                        </strong>
+
                         <span id="labelCustomer"></span>
+
                     </div>
 
+
                     <div class="label-line">
-                        <strong>Reference No.:</strong>
+
+                        <strong>
+                            Reference No.:
+                        </strong>
+
                         <span id="labelReference"></span>
+
                     </div>
 
-                    <div class="label-line">
-                        <strong>Item / Contents:</strong>
-                        <span id="labelItem"></span>
+
+                    <div class="box-number">
+
+                        Box
+                        <span id="labelBoxNumber">
+                            1
+                        </span>
+
+                        of
+
+                        <span id="labelBoxTotal">
+                            1
+                        </span>
+
                     </div>
+
+
+                    <div class="label-line">
+
+                        <strong>
+                            Item / Contents:
+                        </strong>
+
+                        <span id="labelItem"></span>
+
+                    </div>
+
 
                     <div
-                        style="text-align:center;font-weight:bold;margin-top:20px;"
+                        style="
+                        text-align:center;
+                        font-weight:bold;
+                        margin-top:20px;
+                        "
                     >
                         QR CODE
                     </div>
 
-                    <div id="qrPreview"></div>
+
+                    <div
+                        id="qrPreview"
+                        class="qr-code"
+                    ></div>
+
 
                 </div>
 
             </div>
 
 
-            <div class="print-hide">
+
+            <!-- BOX SELECTOR -->
+
+            <div
+                class="print-hide"
+                style="text-align:center;"
+            >
+
+                <h3>
+                    Select Box
+                </h3>
+
+                <div
+                    id="boxSelector"
+                    class="box-selector"
+                ></div>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div
+                class="print-hide"
+                style="text-align:center;"
+            >
 
                 <button
                     class="btn-green"
-                    onclick="downloadLabel(currentQRId)"
+                    onclick="saveCurrentLabel()"
                 >
                     💾 Save as Image
                 </button>
 
-                <button
-                    class="btn-primary"
-                    onclick="printLabel()"
-                >
-                    🖨 Print QR Label
-                </button>
 
                 <button
-                    class="btn-dark"
-                    onclick="showDashboard()"
+                    class="btn-orange"
+                    onclick="printCurrentLabel()"
                 >
-                    ← Back to Dashboard
+                    🖨 Print Label
                 </button>
+
+
+                <button
+                    class="btn-black"
+                    onclick="printAllLabels()"
+                >
+                    🖨 Print All Labels
+                </button>
+
 
                 <button
                     class="btn-grey"
-                    onclick="testScan()"
+                    onclick="showDashboard()"
                 >
-                    Test QR Scan
+                    ← Back to Dashboard
                 </button>
 
             </div>
@@ -668,7 +888,10 @@ th {
 </div>
 
 
-<!-- ================= SCAN VIEW ================= -->
+
+<!-- =====================================================
+     SCAN RESULT
+===================================================== -->
 
 <div id="scanScreen" class="hidden">
 
@@ -680,16 +903,11 @@ th {
                 MOOVIT
             </div>
 
-            <div id="scanContent"></div>
 
-            <br>
-
-            <button
-                class="btn-dark"
-                onclick="showDashboard()"
-            >
-                Back to Dashboard
-            </button>
+            <div
+                id="scanContent"
+                class="scan-box"
+            ></div>
 
         </div>
 
@@ -698,41 +916,47 @@ th {
 </div>
 
 
+
 <script>
 
-/* =========================================
+
+/* =====================================================
    SETTINGS
-========================================= */
+===================================================== */
 
 const ADMIN_PASSWORD = "admin123";
 
 let records = [];
 
-let currentQRId = null;
+let currentRecordId = null;
+
+let currentBoxNumber = 1;
 
 
-/* =========================================
-   LOAD DATA
-========================================= */
+
+/* =====================================================
+   LOAD RECORDS
+===================================================== */
 
 function loadRecords() {
 
     const saved =
         localStorage.getItem("moovitRecords");
 
-    if (saved) {
+    if (!saved) {
 
-        try {
+        records = [];
 
-            records = JSON.parse(saved);
+        return;
 
-        } catch (e) {
+    }
 
-            records = [];
+    try {
 
-        }
+        records =
+            JSON.parse(saved);
 
-    } else {
+    } catch (error) {
 
         records = [];
 
@@ -741,9 +965,10 @@ function loadRecords() {
 }
 
 
-/* =========================================
-   SAVE DATA
-========================================= */
+
+/* =====================================================
+   SAVE RECORDS
+===================================================== */
 
 function saveRecords() {
 
@@ -755,16 +980,23 @@ function saveRecords() {
 }
 
 
-/* =========================================
+
+/* =====================================================
    LOGIN
-========================================= */
+===================================================== */
 
 function login() {
 
     const password =
-        document.getElementById("loginPassword").value;
+        document.getElementById(
+            "loginPassword"
+        ).value;
 
-    if (password === ADMIN_PASSWORD) {
+
+    if (
+        password ===
+        ADMIN_PASSWORD
+    ) {
 
         localStorage.setItem(
             "moovitLoggedIn",
@@ -775,7 +1007,9 @@ function login() {
 
     } else {
 
-        document.getElementById("loginError").textContent =
+        document.getElementById(
+            "loginError"
+        ).textContent =
             "Incorrect password.";
 
     }
@@ -783,89 +1017,140 @@ function login() {
 }
 
 
-/* =========================================
+
+/* =====================================================
    LOGOUT
-========================================= */
+===================================================== */
 
 function logout() {
 
-    localStorage.removeItem("moovitLoggedIn");
+    localStorage.removeItem(
+        "moovitLoggedIn"
+    );
 
-    document.getElementById("adminScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "adminScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("qrScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "qrScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("scanScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "scanScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("loginScreen")
-        .classList.remove("hidden");
+    document.getElementById(
+        "loginScreen"
+    ).classList.remove("hidden");
 
 }
 
 
-/* =========================================
-   DASHBOARD
-========================================= */
+
+/* =====================================================
+   SHOW DASHBOARD
+===================================================== */
 
 function showDashboard() {
 
-    document.getElementById("loginScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "loginScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("qrScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "qrScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("scanScreen")
-        .classList.add("hidden");
+    document.getElementById(
+        "scanScreen"
+    ).classList.add("hidden");
 
-    document.getElementById("adminScreen")
-        .classList.remove("hidden");
+    document.getElementById(
+        "adminScreen"
+    ).classList.remove("hidden");
 
     updateDashboard();
 
 }
 
 
-/* =========================================
+
+/* =====================================================
    CREATE RECORD
-========================================= */
+===================================================== */
 
 function createRecord() {
 
     const customer =
-        document.getElementById("customer").value.trim();
+        document.getElementById(
+            "customer"
+        ).value.trim();
+
 
     const telephone =
-        document.getElementById("telephone").value.trim();
+        document.getElementById(
+            "telephone"
+        ).value.trim();
+
 
     const email =
-        document.getElementById("email").value.trim();
+        document.getElementById(
+            "email"
+        ).value.trim();
+
 
     const address =
-        document.getElementById("address").value.trim();
+        document.getElementById(
+            "address"
+        ).value.trim();
+
 
     const item =
-        document.getElementById("item").value.trim();
+        document.getElementById(
+            "item"
+        ).value.trim();
+
+
+    const boxCount =
+        parseInt(
+            document.getElementById(
+                "boxCount"
+            ).value,
+            10
+        );
+
 
     const amount =
-        document.getElementById("amount").value;
+        document.getElementById(
+            "amount"
+        ).value;
+
 
     const dueDate =
-        document.getElementById("dueDate").value;
+        document.getElementById(
+            "dueDate"
+        ).value;
+
 
     const paymentStatus =
-        document.getElementById("paymentStatus").value;
+        document.getElementById(
+            "paymentStatus"
+        ).value;
+
 
     const notes =
-        document.getElementById("notes").value.trim();
+        document.getElementById(
+            "notes"
+        ).value.trim();
+
 
 
     if (!customer) {
 
-        alert("Please enter a customer name.");
+        alert(
+            "Please enter a customer name."
+        );
 
         return;
 
@@ -874,18 +1159,49 @@ function createRecord() {
 
     if (!item) {
 
-        alert("Please enter the item / contents.");
+        alert(
+            "Please enter the item / contents."
+        );
 
         return;
 
     }
 
 
+    if (
+        !boxCount ||
+        boxCount < 1
+    ) {
+
+        alert(
+            "Please enter the number of boxes."
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+     * Permanent reference number
+     */
+
     const reference =
-        String(records.length + 1).padStart(4, "0");
+        String(
+            records.length + 1
+        ).padStart(
+            4,
+            "0"
+        );
 
 
-    const randomId =
+
+    /*
+     * Unique record ID
+     */
+
+    const id =
         (
             window.crypto &&
             crypto.randomUUID
@@ -894,12 +1210,15 @@ function createRecord() {
         crypto.randomUUID()
         :
         Date.now().toString(36) +
-        Math.random().toString(36).substring(2);
+        Math.random()
+            .toString(36)
+            .substring(2);
+
 
 
     const record = {
 
-        id: randomId,
+        id: id,
 
         reference: reference,
 
@@ -913,11 +1232,14 @@ function createRecord() {
 
         item: item,
 
+        boxCount: boxCount,
+
         amount: amount,
 
         dueDate: dueDate,
 
-        paymentStatus: paymentStatus,
+        paymentStatus:
+            paymentStatus,
 
         notes: notes,
 
@@ -925,6 +1247,7 @@ function createRecord() {
             new Date().toISOString()
 
     };
+
 
 
     records.push(record);
@@ -935,109 +1258,187 @@ function createRecord() {
 
     updateDashboard();
 
-    showQR(randomId);
+    showQR(
+        record.id,
+        1
+    );
 
 }
 
 
-/* =========================================
+
+/* =====================================================
    CLEAR FORM
-========================================= */
+===================================================== */
 
 function clearForm() {
 
-    document.getElementById("customer").value = "";
+    document.getElementById(
+        "customer"
+    ).value = "";
 
-    document.getElementById("telephone").value = "";
 
-    document.getElementById("email").value = "";
+    document.getElementById(
+        "telephone"
+    ).value = "";
 
-    document.getElementById("address").value = "";
 
-    document.getElementById("item").value = "";
+    document.getElementById(
+        "email"
+    ).value = "";
 
-    document.getElementById("amount").value = "";
 
-    document.getElementById("dueDate").value = "";
+    document.getElementById(
+        "address"
+    ).value = "";
 
-    document.getElementById("paymentStatus").value =
-        "Unpaid";
 
-    document.getElementById("notes").value = "";
+    document.getElementById(
+        "item"
+    ).value = "";
+
+
+    document.getElementById(
+        "boxCount"
+    ).value = "1";
+
+
+    document.getElementById(
+        "amount"
+    ).value = "";
+
+
+    document.getElementById(
+        "dueDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "paymentStatus"
+    ).value = "Unpaid";
+
+
+    document.getElementById(
+        "notes"
+    ).value = "";
 
 }
 
 
-/* =========================================
-   DASHBOARD COUNTS
-========================================= */
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 function updateDashboard() {
 
-    document.getElementById("recordCount").textContent =
+    document.getElementById(
+        "recordCount"
+    ).textContent =
         records.length;
 
 
     let paid = 0;
+
     let due = 0;
+
     let overdue = 0;
 
 
-    records.forEach(record => {
 
-        if (record.paymentStatus === "Paid") {
+    records.forEach(
+        record => {
 
-            paid++;
+            if (
+                record.paymentStatus ===
+                "Paid"
+            ) {
 
-            return;
+                paid++;
+
+                return;
+
+            }
+
+
+            if (!record.dueDate) {
+
+                return;
+
+            }
+
+
+            const today =
+                new Date();
+
+            today.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+
+            const dueDate =
+                new Date(
+                    record.dueDate
+                );
+
+            dueDate.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+
+            const difference =
+                (
+                    dueDate -
+                    today
+                ) /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                );
+
+
+            if (
+                difference < 0
+            ) {
+
+                overdue++;
+
+            }
+            else if (
+                difference <= 7
+            ) {
+
+                due++;
+
+            }
 
         }
+    );
 
 
-        if (!record.dueDate) {
-
-            return;
-
-        }
-
-
-        const today =
-            new Date();
-
-        today.setHours(0,0,0,0);
-
-
-        const dueDate =
-            new Date(record.dueDate);
-
-        dueDate.setHours(0,0,0,0);
-
-
-        const difference =
-            (dueDate - today) /
-            (1000 * 60 * 60 * 24);
-
-
-        if (difference < 0) {
-
-            overdue++;
-
-        } else if (difference <= 7) {
-
-            due++;
-
-        }
-
-    });
-
-
-    document.getElementById("paidCount").textContent =
+    document.getElementById(
+        "paidCount"
+    ).textContent =
         paid;
 
-    document.getElementById("dueCount").textContent =
+
+    document.getElementById(
+        "dueCount"
+    ).textContent =
         due;
 
-    document.getElementById("overdueCount").textContent =
+
+    document.getElementById(
+        "overdueCount"
+    ).textContent =
         overdue;
 
 
@@ -1046,22 +1447,36 @@ function updateDashboard() {
 }
 
 
-/* =========================================
-   PAYMENT STATUS
-========================================= */
 
-function getPaymentDisplay(record) {
+/* =====================================================
+   PAYMENT DISPLAY
+===================================================== */
 
-    if (record.paymentStatus === "Paid") {
+function getPaymentDisplay(
+    record
+) {
 
-        return `<span class="status-paid">PAID</span>`;
+    if (
+        record.paymentStatus ===
+        "Paid"
+    ) {
+
+        return `
+            <span style="color:green;font-weight:bold;">
+                PAID
+            </span>
+        `;
 
     }
 
 
     if (!record.dueDate) {
 
-        return `<span>UNPAID</span>`;
+        return `
+            <span>
+                UNPAID
+            </span>
+        `;
 
     }
 
@@ -1069,343 +1484,534 @@ function getPaymentDisplay(record) {
     const today =
         new Date();
 
-    today.setHours(0,0,0,0);
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
 
     const dueDate =
-        new Date(record.dueDate);
+        new Date(
+            record.dueDate
+        );
 
-    dueDate.setHours(0,0,0,0);
+    dueDate.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
 
     const difference =
-        (dueDate - today) /
-        (1000 * 60 * 60 * 24);
+        (
+            dueDate -
+            today
+        ) /
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        );
 
 
-    if (difference < 0) {
+    if (
+        difference < 0
+    ) {
 
-        return `<span class="status-overdue">OVERDUE</span>`;
+        return `
+            <span style="color:red;font-weight:bold;">
+                OVERDUE
+            </span>
+        `;
 
     }
 
 
-    if (difference <= 7) {
+    if (
+        difference <= 7
+    ) {
 
-        return `<span class="status-due">DUE SOON</span>`;
+        return `
+            <span style="color:#d68a00;font-weight:bold;">
+                DUE SOON
+            </span>
+        `;
 
     }
 
 
-    return `<span>UNPAID</span>`;
+    return `
+        <span>
+            UNPAID
+        </span>
+    `;
 
 }
 
 
-/* =========================================
+
+/* =====================================================
    RECORD TABLE
-========================================= */
+===================================================== */
 
 function renderRecords() {
 
     const tbody =
-        document.getElementById("recordsTable");
+        document.getElementById(
+            "recordsTable"
+        );
+
 
     tbody.innerHTML = "";
 
 
-    records.forEach(record => {
+    records.forEach(
+        record => {
 
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>
-                ${record.reference}
-            </td>
-
-            <td>
-                ${escapeHTML(record.customer)}
-            </td>
-
-            <td>
-                ${escapeHTML(record.item)}
-            </td>
-
-            <td>
-                ${getPaymentDisplay(record)}
-            </td>
-
-            <td>
-
-                <button
-                    class="btn-primary"
-                    onclick="showQR('${record.id}')"
-                >
-                    QR
-                </button>
-
-            </td>
-
-        `;
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
 
-        tbody.appendChild(row);
+            row.innerHTML = `
 
-    });
+                <td>
+                    ${escapeHTML(
+                        record.reference
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        record.customer
+                    )}
+                </td>
+
+                <td>
+                    ${record.boxCount}
+                </td>
+
+                <td>
+                    ${getPaymentDisplay(
+                        record
+                    )}
+                </td>
+
+                <td>
+
+                    <button
+                        class="btn-orange"
+                        onclick="showQR(
+                            '${record.id}',
+                            1
+                        )"
+                    >
+                        QR
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
 
 }
 
 
-/* =========================================
-   SHOW QR LABEL
-========================================= */
 
-function showQR(id) {
+/* =====================================================
+   ENCODE QR DATA
+===================================================== */
+
+function encodeQRData(
+    record,
+    boxNumber
+) {
+
+    const payload = {
+
+        id:
+            record.id,
+
+        reference:
+            record.reference,
+
+        customer:
+            record.customer,
+
+        telephone:
+            record.telephone,
+
+        email:
+            record.email,
+
+        address:
+            record.address,
+
+        item:
+            record.item,
+
+        boxNumber:
+            boxNumber,
+
+        boxCount:
+            record.boxCount,
+
+        amount:
+            record.amount,
+
+        dueDate:
+            record.dueDate,
+
+        paymentStatus:
+            record.paymentStatus,
+
+        notes:
+            record.notes
+
+    };
+
+
+    const json =
+        JSON.stringify(
+            payload
+        );
+
+
+    /*
+     * Convert UTF-8 safely to Base64
+     */
+
+    const bytes =
+        new TextEncoder()
+            .encode(json);
+
+
+    let binary = "";
+
+    bytes.forEach(
+        byte => {
+            binary +=
+                String.fromCharCode(
+                    byte
+                );
+        }
+    );
+
+
+    const base64 =
+        btoa(binary);
+
+
+    /*
+     * Make Base64 safe for URLs
+     */
+
+    return base64
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+}
+
+
+
+/* =====================================================
+   DECODE QR DATA
+===================================================== */
+
+function decodeQRData(
+    encoded
+) {
+
+    try {
+
+        let base64 =
+            encoded
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+
+        while (
+            base64.length % 4
+        ) {
+
+            base64 += "=";
+
+        }
+
+
+        const binary =
+            atob(base64);
+
+
+        const bytes =
+            Uint8Array.from(
+                binary,
+                char =>
+                    char.charCodeAt(0)
+            );
+
+
+        const json =
+            new TextDecoder()
+                .decode(bytes);
+
+
+        return JSON.parse(
+            json
+        );
+
+    } catch (error) {
+
+        return null;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SHOW QR LABEL
+===================================================== */
+
+function showQR(
+    id,
+    boxNumber
+) {
 
     const record =
-        records.find(r => r.id === id);
-
-    if (!record) return;
-
-
-    currentQRId = id;
+        records.find(
+            r =>
+                r.id === id
+        );
 
 
-    document.getElementById("adminScreen")
-        .classList.add("hidden");
+    if (!record) {
 
-    document.getElementById("scanScreen")
-        .classList.add("hidden");
+        alert(
+            "Record not found."
+        );
 
-    document.getElementById("qrScreen")
-        .classList.remove("hidden");
+        return;
 
-
-    document.getElementById("labelCustomer").textContent =
-        record.customer || "";
-
-    document.getElementById("labelReference").textContent =
-        record.reference || "";
-
-    document.getElementById("labelItem").textContent =
-        record.item || "";
+    }
 
 
-    const qrPreview =
-        document.getElementById("qrPreview");
+    currentRecordId =
+        id;
 
-    qrPreview.innerHTML = "";
+
+    currentBoxNumber =
+        boxNumber;
+
+
+    document.getElementById(
+        "adminScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "scanScreen"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "qrScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "labelCustomer"
+    ).textContent =
+        record.customer;
+
+
+    document.getElementById(
+        "labelReference"
+    ).textContent =
+        record.reference;
+
+
+    document.getElementById(
+        "labelBoxNumber"
+    ).textContent =
+        boxNumber;
+
+
+    document.getElementById(
+        "labelBoxTotal"
+    ).textContent =
+        record.boxCount;
+
+
+    document.getElementById(
+        "labelItem"
+    ).textContent =
+        record.item;
+
+
+    createBoxButtons(
+        record
+    );
+
+
+    createQRCode(
+        record,
+        boxNumber
+    );
+
+}
+
+
+
+/* =====================================================
+   CREATE BOX BUTTONS
+===================================================== */
+
+function createBoxButtons(
+    record
+) {
+
+    const selector =
+        document.getElementById(
+            "boxSelector"
+        );
+
+
+    selector.innerHTML = "";
+
+
+    for (
+        let i = 1;
+        i <= record.boxCount;
+        i++
+    ) {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.className =
+            "btn-grey";
+
+
+        button.textContent =
+            i;
+
+
+        button.onclick =
+            function() {
+
+                showQR(
+                    record.id,
+                    i
+                );
+
+            };
+
+
+        selector.appendChild(
+            button
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CREATE QR CODE
+===================================================== */
+
+function createQRCode(
+    record,
+    boxNumber
+) {
+
+    const preview =
+        document.getElementById(
+            "qrPreview"
+        );
+
+
+    preview.innerHTML = "";
+
+
+    const encoded =
+        encodeQRData(
+            record,
+            boxNumber
+        );
 
 
     const qrURL =
         window.location.origin +
         window.location.pathname +
-        "?id=" +
-        encodeURIComponent(record.id);
+        "?data=" +
+        encoded;
 
 
-    new QRCode(qrPreview, {
+    new QRCode(
+        preview,
+        {
 
-        text: qrURL,
+            text:
+                qrURL,
 
-        width: 250,
+            width:
+                250,
 
-        height: 250,
+            height:
+                250,
 
-        correctLevel: QRCode.CorrectLevel.H
+            correctLevel:
+                QRCode.CorrectLevel.H
 
-    });
+        }
+    );
 
 }
 
 
-/* =========================================
-   SAVE LABEL AS JPEG
-========================================= */
 
-async function downloadLabel(id) {
+/* =====================================================
+   SAVE CURRENT LABEL AS JPEG
+===================================================== */
+
+async function saveCurrentLabel() {
 
     const record =
-        records.find(r => r.id === id);
+        records.find(
+            r =>
+                r.id ===
+                currentRecordId
+        );
+
 
     if (!record) return;
 
-
-    const canvas =
-        document.createElement("canvas");
-
-    canvas.width = 1000;
-    canvas.height = 1200;
-
-
-    const ctx =
-        canvas.getContext("2d");
-
-
-    /* WHITE BACKGROUND */
-
-    ctx.fillStyle = "#ffffff";
-
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
-
-    /* BORDER */
-
-    ctx.strokeStyle = "#000000";
-
-    ctx.lineWidth = 8;
-
-    ctx.strokeRect(
-        20,
-        20,
-        960,
-        1160
-    );
-
-
-    /* MOOVIT */
-
-    ctx.fillStyle = "#000000";
-
-    ctx.textAlign = "center";
-
-    ctx.font =
-        "bold 70px Arial";
-
-    ctx.fillText(
-        "MOOVIT",
-        500,
-        110
-    );
-
-
-    /* CUSTOMER */
-
-    ctx.textAlign = "left";
-
-    ctx.font =
-        "bold 38px Arial";
-
-    ctx.fillText(
-        "Customer:",
-        70,
-        200
-    );
-
-
-    ctx.font =
-        "38px Arial";
-
-    ctx.fillText(
-        record.customer || "",
-        70,
-        250
-    );
-
-
-    /* REFERENCE */
-
-    ctx.font =
-        "bold 38px Arial";
-
-    ctx.fillText(
-        "Reference No.:",
-        70,
-        330
-    );
-
-
-    ctx.font =
-        "38px Arial";
-
-    ctx.fillText(
-        record.reference || "",
-        70,
-        380
-    );
-
-
-    /* ITEM */
-
-    ctx.font =
-        "bold 38px Arial";
-
-    ctx.fillText(
-        "Item / Contents:",
-        70,
-        460
-    );
-
-
-    ctx.font =
-        "34px Arial";
-
-
-    const itemText =
-        record.item || "";
-
-
-    const words =
-        itemText.split(" ");
-
-
-    let line = "";
-
-    let y = 510;
-
-
-    for (let i = 0; i < words.length; i++) {
-
-        const testLine =
-            line +
-            words[i] +
-            " ";
-
-
-        const width =
-            ctx.measureText(testLine).width;
-
-
-        if (width > 850) {
-
-            ctx.fillText(
-                line,
-                70,
-                y
-            );
-
-            line =
-                words[i] +
-                " ";
-
-            y += 45;
-
-        } else {
-
-            line =
-                testLine;
-
-        }
-
-    }
-
-
-    ctx.fillText(
-        line,
-        70,
-        y
-    );
-
-
-    /* QR CODE */
 
     const qrCanvas =
         document.querySelector(
@@ -1419,12 +2025,245 @@ async function downloadLabel(id) {
         );
 
 
-    const qrSize = 550;
+    if (
+        !qrCanvas &&
+        !qrImage
+    ) {
+
+        alert(
+            "QR code is not ready yet."
+        );
+
+        return;
+
+    }
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        1000;
+
+    canvas.height =
+        1200;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /* BACKGROUND */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        1000,
+        1200
+    );
+
+
+    /* BORDER */
+
+    ctx.strokeStyle =
+        "#000000";
+
+    ctx.lineWidth =
+        8;
+
+    ctx.strokeRect(
+        20,
+        20,
+        960,
+        1160
+    );
+
+
+    /* MOOVIT */
+
+    ctx.fillStyle =
+        "#000000";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.font =
+        "bold 70px Arial";
+
+    ctx.fillText(
+        "MOOVIT",
+        500,
+        105
+    );
+
+
+    /* CUSTOMER */
+
+    ctx.textAlign =
+        "left";
+
+    ctx.font =
+        "bold 38px Arial";
+
+    ctx.fillText(
+        "Customer:",
+        70,
+        190
+    );
+
+
+    ctx.font =
+        "38px Arial";
+
+    ctx.fillText(
+        record.customer,
+        70,
+        240
+    );
+
+
+    /* REFERENCE */
+
+    ctx.font =
+        "bold 38px Arial";
+
+    ctx.fillText(
+        "Reference No.:",
+        70,
+        320
+    );
+
+
+    ctx.font =
+        "38px Arial";
+
+    ctx.fillText(
+        record.reference,
+        70,
+        370
+    );
+
+
+    /* BOX */
+
+    ctx.textAlign =
+        "center";
+
+    ctx.font =
+        "bold 42px Arial";
+
+    ctx.fillText(
+        "BOX " +
+        currentBoxNumber +
+        " OF " +
+        record.boxCount,
+        500,
+        445
+    );
+
+
+    /* ITEM */
+
+    ctx.textAlign =
+        "left";
+
+    ctx.font =
+        "bold 36px Arial";
+
+    ctx.fillText(
+        "Item / Contents:",
+        70,
+        510
+    );
+
+
+    ctx.font =
+        "32px Arial";
+
+
+    const words =
+        String(
+            record.item || ""
+        ).split(" ");
+
+
+    let line = "";
+
+    let y = 555;
+
+
+    words.forEach(
+        word => {
+
+            const test =
+                line +
+                word +
+                " ";
+
+
+            if (
+                ctx.measureText(
+                    test
+                ).width > 850
+            ) {
+
+                ctx.fillText(
+                    line,
+                    70,
+                    y
+                );
+
+                line =
+                    word +
+                    " ";
+
+                y += 42;
+
+            } else {
+
+                line =
+                    test;
+
+            }
+
+        }
+    );
+
+
+    if (line) {
+
+        ctx.fillText(
+            line,
+            70,
+            y
+        );
+
+    }
+
+
+    /* QR */
+
+    const qrSize =
+        500;
+
 
     const qrX =
-        (1000 - qrSize) / 2;
+        250;
 
-    const qrY = 570;
+
+    const qrY =
+        Math.max(
+            590,
+            y + 35
+        );
 
 
     if (qrCanvas) {
@@ -1437,7 +2276,7 @@ async function downloadLabel(id) {
             qrSize
         );
 
-    } else if (qrImage) {
+    } else {
 
         ctx.drawImage(
             qrImage,
@@ -1447,33 +2286,36 @@ async function downloadLabel(id) {
             qrSize
         );
 
-    } else {
-
-        alert("QR code could not be found.");
-
-        return;
-
     }
 
 
-    /* SCAN TEXT */
+    /* FOOTER */
 
-    ctx.textAlign = "center";
+    ctx.textAlign =
+        "center";
 
     ctx.font =
-        "bold 36px Arial";
+        "bold 34px Arial";
 
     ctx.fillText(
         "SCAN TO IDENTIFY",
         500,
-        1170
+        1160
     );
 
 
-    /* CREATE JPEG */
+    const filename =
+        "MOOVIT_" +
+        record.reference +
+        "_Box_" +
+        currentBoxNumber +
+        "_of_" +
+        record.boxCount +
+        ".jpg";
+
 
     canvas.toBlob(
-        async function(blob) {
+        async blob => {
 
             if (!blob) {
 
@@ -1486,36 +2328,27 @@ async function downloadLabel(id) {
             }
 
 
-            const filename =
-                "MOOVIT_" +
-                (record.reference || "Label") +
-                "_QR_Label.jpg";
-
-
             const file =
                 new File(
                     [blob],
                     filename,
                     {
-                        type: "image/jpeg"
+                        type:
+                            "image/jpeg"
                     }
                 );
 
 
             /*
-             * iPHONE / iPAD / MODERN MOBILE
-             *
-             * Opens the normal sharing screen.
-             * From there you can choose:
-             * Save Image
-             * Save to Files
+             * iPhone / iPad
              */
 
             if (
                 navigator.share &&
                 navigator.canShare &&
                 navigator.canShare({
-                    files: [file]
+                    files:
+                        [file]
                 })
             ) {
 
@@ -1523,7 +2356,8 @@ async function downloadLabel(id) {
 
                     await navigator.share({
 
-                        files: [file],
+                        files:
+                            [file],
 
                         title:
                             "MOOVIT QR Label",
@@ -1552,33 +2386,45 @@ async function downloadLabel(id) {
 
 
             /*
-             * DESKTOP / BROWSER FALLBACK
+             * Desktop fallback
              */
 
             const url =
-                URL.createObjectURL(blob);
+                URL.createObjectURL(
+                    blob
+                );
 
 
             const link =
-                document.createElement("a");
+                document.createElement(
+                    "a"
+                );
 
 
-            link.href = url;
+            link.href =
+                url;
 
-            link.download = filename;
+            link.download =
+                filename;
 
 
-            document.body.appendChild(link);
+            document.body.appendChild(
+                link
+            );
 
             link.click();
 
-            document.body.removeChild(link);
+            document.body.removeChild(
+                link
+            );
 
 
             setTimeout(
-                function() {
+                () => {
 
-                    URL.revokeObjectURL(url);
+                    URL.revokeObjectURL(
+                        url
+                    );
 
                 },
                 1000
@@ -1593,126 +2439,513 @@ async function downloadLabel(id) {
 }
 
 
-/* =========================================
-   PRINT LABEL
-========================================= */
 
-function printLabel() {
+/* =====================================================
+   PRINT CURRENT LABEL
+===================================================== */
+
+function printCurrentLabel() {
 
     window.print();
 
 }
 
 
-/* =========================================
-   TEST QR SCAN
-========================================= */
 
-function testScan() {
+/* =====================================================
+   PRINT ALL LABELS
+===================================================== */
 
-    if (!currentQRId) return;
-
-    showScan(currentQRId);
-
-}
-
-
-/* =========================================
-   SHOW SCAN RESULT
-========================================= */
-
-function showScan(id) {
+function printAllLabels() {
 
     const record =
-        records.find(r => r.id === id);
+        records.find(
+            r =>
+                r.id ===
+                currentRecordId
+        );
 
 
-    if (!record) {
+    if (!record) return;
 
-        showNotFound();
 
-        return;
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+
+    printArea.innerHTML = "";
+
+
+    for (
+        let i = 1;
+        i <= record.boxCount;
+        i++
+    ) {
+
+        const label =
+            document.createElement(
+                "div"
+            );
+
+
+        label.className =
+            "qr-label";
+
+
+        label.innerHTML = `
+
+            <h2>
+                MOOVIT
+            </h2>
+
+            <div class="label-line">
+
+                <strong>
+                    Customer:
+                </strong>
+
+                ${escapeHTML(
+                    record.customer
+                )}
+
+            </div>
+
+            <div class="label-line">
+
+                <strong>
+                    Reference No.:
+                </strong>
+
+                ${escapeHTML(
+                    record.reference
+                )}
+
+            </div>
+
+            <div class="box-number">
+
+                Box ${i}
+                of
+                ${record.boxCount}
+
+            </div>
+
+            <div class="label-line">
+
+                <strong>
+                    Item / Contents:
+                </strong>
+
+                ${escapeHTML(
+                    record.item
+                )}
+
+            </div>
+
+            <div
+                style="
+                text-align:center;
+                font-weight:bold;
+                margin-top:20px;
+                "
+            >
+                QR CODE
+            </div>
+
+            <div
+                id="printQR${i}"
+                class="qr-code"
+            ></div>
+
+        `;
+
+
+        printArea.appendChild(
+            label
+        );
+
+
+        const encoded =
+            encodeQRData(
+                record,
+                i
+            );
+
+
+        const qrURL =
+            window.location.origin +
+            window.location.pathname +
+            "?data=" +
+            encoded;
+
+
+        new QRCode(
+            label.querySelector(
+                "#printQR" + i
+            ),
+            {
+
+                text:
+                    qrURL,
+
+                width:
+                    250,
+
+                height:
+                    250,
+
+                correctLevel:
+                    QRCode.CorrectLevel.H
+
+            }
+        );
 
     }
 
 
-    document.getElementById("loginScreen")
-        .classList.add("hidden");
+    /*
+     * Give QR codes time to render
+     */
 
-    document.getElementById("adminScreen")
-        .classList.add("hidden");
+    setTimeout(
+        () => {
 
-    document.getElementById("qrScreen")
-        .classList.add("hidden");
+            window.print();
 
-    document.getElementById("scanScreen")
-        .classList.remove("hidden");
+            /*
+             * Restore normal single label
+             */
+
+            setTimeout(
+                () => {
+
+                    showQR(
+                        record.id,
+                        currentBoxNumber
+                    );
+
+                },
+                500
+            );
+
+        },
+        500
+    );
+
+}
 
 
-    let paymentHTML =
-        getPaymentDisplay(record);
+
+/* =====================================================
+   SHOW SCAN RESULT
+===================================================== */
+
+function showScan(
+    data
+) {
+
+    document.getElementById(
+        "loginScreen"
+    ).classList.add(
+        "hidden"
+    );
 
 
-    let amountHTML = "";
+    document.getElementById(
+        "adminScreen"
+    ).classList.add(
+        "hidden"
+    );
 
 
-    if (record.amount) {
+    document.getElementById(
+        "qrScreen"
+    ).classList.add(
+        "hidden"
+    );
 
-        amountHTML =
-            `<div class="scan-field">
-                <strong>Payment Amount</strong>
-                €${escapeHTML(record.amount)}
-            </div>`;
+
+    document.getElementById(
+        "scanScreen"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    const record =
+        data;
+
+
+    let statusHTML =
+        "UNPAID";
+
+
+    if (
+        record.paymentStatus ===
+        "Paid"
+    ) {
+
+        statusHTML =
+            "PAID";
+
+    }
+    else if (
+        record.dueDate
+    ) {
+
+        const today =
+            new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const due =
+            new Date(
+                record.dueDate
+            );
+
+        due.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const days =
+            (
+                due -
+                today
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            );
+
+
+        if (
+            days < 0
+        ) {
+
+            statusHTML =
+                "OVERDUE";
+
+        }
+        else if (
+            days <= 7
+        ) {
+
+            statusHTML =
+                "DUE SOON";
+
+        }
 
     }
 
 
-    document.getElementById("scanContent").innerHTML = `
 
-        <div class="scan-status">
-            ${paymentHTML}
+    let statusColour =
+        "#eeeeee";
+
+
+    if (
+        statusHTML ===
+        "PAID"
+    ) {
+
+        statusColour =
+            "#d9f2df";
+
+    }
+    else if (
+        statusHTML ===
+        "OVERDUE"
+    ) {
+
+        statusColour =
+            "#ffd9d9";
+
+    }
+    else if (
+        statusHTML ===
+        "DUE SOON"
+    ) {
+
+        statusColour =
+            "#fff0c7";
+
+    }
+
+
+
+    document.getElementById(
+        "scanContent"
+    ).innerHTML = `
+
+        <div
+            class="scan-status"
+            style="
+            background:${statusColour};
+            "
+        >
+            ${statusHTML}
         </div>
 
+
         <div class="scan-field">
-            <strong>Reference</strong>
-            ${escapeHTML(record.reference)}
+
+            <strong>
+                Reference
+            </strong>
+
+            ${escapeHTML(
+                record.reference
+            )}
+
         </div>
 
+
         <div class="scan-field">
-            <strong>Customer</strong>
-            ${escapeHTML(record.customer)}
+
+            <strong>
+                Customer
+            </strong>
+
+            ${escapeHTML(
+                record.customer
+            )}
+
         </div>
 
+
         <div class="scan-field">
-            <strong>Item / Contents</strong>
-            ${escapeHTML(record.item)}
+
+            <strong>
+                Box
+            </strong>
+
+            ${escapeHTML(
+                String(
+                    record.boxNumber
+                )
+            )}
+
+            of
+
+            ${escapeHTML(
+                String(
+                    record.boxCount
+                )
+            )}
+
         </div>
 
+
         <div class="scan-field">
-            <strong>Address</strong>
-            ${escapeHTML(record.address)}
+
+            <strong>
+                Item / Contents
+            </strong>
+
+            ${escapeHTML(
+                record.item
+            )}
+
         </div>
 
+
         <div class="scan-field">
-            <strong>Telephone</strong>
-            ${escapeHTML(record.telephone)}
+
+            <strong>
+                Address
+            </strong>
+
+            ${escapeHTML(
+                record.address
+            )}
+
         </div>
 
+
         <div class="scan-field">
-            <strong>Email</strong>
-            ${escapeHTML(record.email)}
+
+            <strong>
+                Telephone
+            </strong>
+
+            ${escapeHTML(
+                record.telephone
+            )}
+
         </div>
 
-        ${amountHTML}
 
         <div class="scan-field">
-            <strong>Payment Due</strong>
-            ${escapeHTML(record.dueDate || "")}
+
+            <strong>
+                Email
+            </strong>
+
+            ${escapeHTML(
+                record.email
+            )}
+
         </div>
 
+
+        ${
+            record.amount
+            ?
+            `
+            <div class="scan-field">
+
+                <strong>
+                    Payment Amount
+                </strong>
+
+                €${escapeHTML(
+                    record.amount
+                )}
+
+            </div>
+            `
+            :
+            ""
+        }
+
+
         <div class="scan-field">
-            <strong>Notes</strong>
-            ${escapeHTML(record.notes)}
+
+            <strong>
+                Payment Due / Expiry
+            </strong>
+
+            ${escapeHTML(
+                record.dueDate || ""
+            )}
+
+        </div>
+
+
+        <div class="scan-field">
+
+            <strong>
+                Notes
+            </strong>
+
+            ${escapeHTML(
+                record.notes
+            )}
+
         </div>
 
     `;
@@ -1720,91 +2953,19 @@ function showScan(id) {
 }
 
 
-/* =========================================
-   NOT FOUND
-========================================= */
 
-function showNotFound() {
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
 
-    document.getElementById("loginScreen")
-        .classList.add("hidden");
+function escapeHTML(
+    value
+) {
 
-    document.getElementById("adminScreen")
-        .classList.add("hidden");
-
-    document.getElementById("qrScreen")
-        .classList.add("hidden");
-
-    document.getElementById("scanScreen")
-        .classList.remove("hidden");
-
-
-    document.getElementById("scanContent").innerHTML = `
-
-        <div style="text-align:center;padding:40px;">
-
-            <h2>Record Not Found</h2>
-
-            <p>
-                This QR code does not match
-                a MOOVIT record.
-            </p>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================
-   RESET DEMO
-========================================= */
-
-function resetDemo() {
-
-    const first =
-        confirm(
-            "WARNING: This will delete all MOOVIT demo records. Continue?"
-        );
-
-
-    if (!first) return;
-
-
-    const second =
-        confirm(
-            "FINAL WARNING: All existing demo data will be permanently removed from this browser. Are you sure?"
-        );
-
-
-    if (!second) return;
-
-
-    records = [];
-
-    localStorage.removeItem(
-        "moovitRecords"
-    );
-
-
-    updateDashboard();
-
-    alert(
-        "MOOVIT demo data has been reset."
-    );
-
-}
-
-
-/* =========================================
-   HTML SECURITY
-========================================= */
-
-function escapeHTML(value) {
-
-    if (value === null ||
-        value === undefined) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
         return "";
 
@@ -1813,49 +2974,166 @@ function escapeHTML(value) {
 
     return String(value)
 
-        .replace(/&/g, "&amp;")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-        .replace(/</g, "&lt;")
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-        .replace(/>/g, "&gt;")
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-        .replace(/"/g, "&quot;")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-        .replace(/'/g, "&#039;");
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-/* =========================================
+
+/* =====================================================
+   RESET DEMO
+===================================================== */
+
+function resetDemo() {
+
+    const first =
+        confirm(
+            "WARNING: This will delete all MOOVIT demo records from this browser. Continue?"
+        );
+
+
+    if (!first) return;
+
+
+    const second =
+        confirm(
+            "FINAL WARNING: All demo records stored on this device will be deleted. Are you sure?"
+        );
+
+
+    if (!second) return;
+
+
+    records = [];
+
+
+    localStorage.removeItem(
+        "moovitRecords"
+    );
+
+
+    updateDashboard();
+
+
+    alert(
+        "MOOVIT demo data has been reset."
+    );
+
+}
+
+
+
+/* =====================================================
    STARTUP
-========================================= */
+===================================================== */
 
 loadRecords();
 
 
+
 /*
- * If URL contains ?id=...
- * show the record directly.
+ * IMPORTANT:
  *
- * This means QR scanning does NOT
- * require admin login.
+ * The QR now uses ?data=
+ * rather than ?id=
+ *
+ * This means the QR can be scanned
+ * on another phone and still display
+ * the information.
  */
 
-const urlParams =
+const params =
     new URLSearchParams(
         window.location.search
     );
 
 
-const scannedId =
-    urlParams.get("id");
+const qrData =
+    params.get(
+        "data"
+    );
 
 
-if (scannedId) {
+if (qrData) {
 
-    showScan(scannedId);
+    const decoded =
+        decodeQRData(
+            qrData
+        );
 
-} else if (
+
+    if (decoded) {
+
+        showScan(
+            decoded
+        );
+
+    }
+    else {
+
+        document.getElementById(
+            "loginScreen"
+        ).classList.add(
+            "hidden"
+        );
+
+        document.getElementById(
+            "scanScreen"
+        ).classList.remove(
+            "hidden"
+        );
+
+        document.getElementById(
+            "scanContent"
+        ).innerHTML = `
+
+            <div
+                style="
+                text-align:center;
+                padding:40px;
+                "
+            >
+
+                <h2>
+                    Invalid QR Code
+                </h2>
+
+                <p>
+                    This QR code could not
+                    be read by MOOVIT.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+else if (
     localStorage.getItem(
         "moovitLoggedIn"
     ) === "true"
@@ -1863,10 +3141,14 @@ if (scannedId) {
 
     showDashboard();
 
-} else {
+}
+else {
 
-    document.getElementById("loginScreen")
-        .classList.remove("hidden");
+    document.getElementById(
+        "loginScreen"
+    ).classList.remove(
+        "hidden"
+    );
 
 }
 
