@@ -1111,6 +1111,78 @@ function editRecord(id) {
 }    
 
 /* -------------------------
+   ARCHIVE RECORD
+------------------------- */
+
+async function archiveRecord(id) {
+
+    const record =
+        records.find(
+            function(r) {
+                return r.id === id;
+            }
+        );
+
+    if(!record) {
+        return;
+    }
+
+    const reference =
+        String(
+            record.reference_no
+        ).padStart(
+            4,
+            "0"
+        );
+
+    if(
+        !confirm(
+            "Archive " +
+            record.customer_name +
+            " (Reference " +
+            reference +
+            ")?"
+        )
+    ) {
+        return;
+    }
+
+    const result =
+        await supabaseClient
+            .from("moovit_records")
+            .update({
+                archived: true
+            })
+            .eq(
+                "id",
+                id
+            );
+
+    if(result.error) {
+
+        alert(
+            "Could not archive record: " +
+            result.error.message
+        );
+
+        return;
+
+    }
+
+    records =
+        records.filter(
+            function(r) {
+                return r.id !== id;
+            }
+        );
+
+    displayRecords();
+
+    updateDashboard();
+
+}
+    
+/* -------------------------
    DISPLAY RECORDS
 ------------------------- */
 
