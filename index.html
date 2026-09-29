@@ -514,34 +514,6 @@ button:hover {
 
         </div>
 
-
-        <div class="stat">
-
-            <div
-                class="stat-number"
-                id="dueRecords"
-            >
-                0
-            </div>
-
-            Due Soon
-
-        </div>
-
-
-        <div class="stat">
-
-            <div
-                class="stat-number"
-                id="overdueRecords"
-            >
-                0
-            </div>
-
-            Overdue
-
-        </div>
-
     </div>
 
 
@@ -586,13 +558,13 @@ button:hover {
         >
 
         <label>
-            Payment Due / Expiry
-        </label>
+    Date Received
+</label>
 
-        <input
-            id="dueDate"
-            type="date"
-        >
+<input
+    id="dateReceived"
+    type="date"
+>
 
         <label>
             Payment Status
@@ -949,12 +921,12 @@ async function createRecord() {
                         .value
                 ),
 
-            payment_due:
-                document
-                    .getElementById("dueDate")
-                    .value
-                    ||
-                    null,
+            date_received:
+    document
+        .getElementById("dateReceived")
+        .value
+        ||
+        null,
 
             payment_status:
                 document
@@ -1125,11 +1097,12 @@ async function createRecord() {
                         .value
                 ),
 
-        payment_due:
-            document
-                .getElementById("dueDate")
-                .value
-                || null,
+        date_received:
+    document
+        .getElementById("dateReceived")
+        .value
+        ||
+        null,
 
         payment_status:
             document
@@ -1374,9 +1347,9 @@ function viewRecord(id) {
         ) +
         '</p>' +
 
-        '<p><strong>PAYMENT DUE:</strong><br>' +
-        safe(record.payment_due || "-") +
-        '</p>' +
+        '<p><strong>DATE RECEIVED:</strong><br>' +
+safe(record.date_received || "-") +
+'</p>' +
 
         '<p><strong>PAYMENT STATUS:</strong><br>' +
         safe(record.payment_status || "-") +
@@ -1494,9 +1467,9 @@ function editRecord(id) {
         record.payment_amount ?? "";
 
     document
-        .getElementById("dueDate")
-        .value =
-        record.payment_due || "";
+    .getElementById("dateReceived")
+    .value =
+    record.date_received || "";
 
     document
         .getElementById("paymentStatus")
@@ -1770,36 +1743,6 @@ function updateDashboard() {
             function(r) {
 
                 return r.payment_status === "Paid";
-
-            }
-        ).length;
-
-
-    document
-        .getElementById(
-            "dueRecords"
-        )
-        .textContent =
-
-        records.filter(
-            function(r) {
-
-                return publicStatus(r) === "Due Soon";
-
-            }
-        ).length;
-
-
-    document
-        .getElementById(
-            "overdueRecords"
-        )
-        .textContent =
-
-        records.filter(
-            function(r) {
-
-                return publicStatus(r) === "Overdue";
 
             }
         ).length;
