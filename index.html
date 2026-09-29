@@ -521,6 +521,15 @@ button:hover {
 
     <!-- QR -->
 
+    <!-- CLIENT LIST NAVIGATION -->
+
+<button
+    onclick="showClientList()"
+    style="margin-bottom:20px;"
+>
+    ← BACK TO CLIENT LIST
+</button>
+
     <div
         id="qrCard"
         class="card hidden"
@@ -1175,6 +1184,22 @@ function publicStatus(record) {
 
 }
 
+/* -------------------------
+   SHOW CLIENT LIST
+------------------------- */
+
+function showClientList() {
+
+    document
+        .getElementById("qrCard")
+        .classList.add("hidden");
+
+    document
+        .getElementById("records")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+}
 
 /* -------------------------
    SHOW QR
