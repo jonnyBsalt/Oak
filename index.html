@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MOOVIT</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -188,6 +186,8 @@ th {
     display: none !important;
 }
 
+/* QR SECTION */
+
 .qr-section {
     text-align: center;
 }
@@ -227,11 +227,13 @@ th {
     line-height: 1.6;
 }
 
-.storage-type {
-    font-size: 22px;
+.print-storage-count {
+    font-size: 28px;
     font-weight: bold;
-    margin: 15px 0;
+    margin: 25px 0;
 }
+
+/* PHONE SCAN */
 
 .scan-page {
     max-width: 700px;
@@ -253,6 +255,8 @@ th {
     margin-bottom: 25px;
 }
 
+/* MOBILE */
+
 @media(max-width:800px) {
 
     .stats {
@@ -262,21 +266,21 @@ th {
     .form-grid {
         grid-template-columns: 1fr;
     }
-
 }
 
 @media(max-width:700px) {
 
-    body.admin-page #adminScreen,
-    body.admin-page #loginScreen {
+    body.admin-page #loginScreen,
+    body.admin-page #adminScreen {
         display: none !important;
     }
 
     body.admin-page #computerMessage {
         display: block !important;
     }
-
 }
+
+/* PRINT */
 
 #printArea {
     display: none;
@@ -318,24 +322,11 @@ th {
     }
 
     .print-storage-count {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
-        margin: 25px 0;
+        margin: 30px 0;
     }
-
 }
-
-/* Hide admin controls on phones */
-
-@media(max-width:700px) {
-
-    #loginScreen,
-    #adminScreen {
-        display: none !important;
-    }
-
-}
-
 </style>
 </head>
 
@@ -346,6 +337,8 @@ th {
 </header>
 
 <div class="container">
+
+<!-- PHONE / COMPUTER MESSAGE -->
 
 <div id="computerMessage" class="card hidden">
 
@@ -461,36 +454,25 @@ th {
             <div>
 
                 <label>Customer Name</label>
-
                 <input id="customer">
 
-
                 <label>Telephone</label>
-
                 <input id="telephone">
 
-
                 <label>Email</label>
-
                 <input id="email">
 
-
                 <label>Address</label>
-
                 <textarea id="address"></textarea>
 
             </div>
 
-
             <div>
 
                 <label>Item / Contents</label>
-
                 <input id="item">
 
-
                 <label>Number of Boxes</label>
-
                 <input
                     id="boxCount"
                     type="number"
@@ -498,23 +480,18 @@ th {
                     value="1"
                 >
 
-
                 <label>Payment Amount (€)</label>
-
                 <input
                     id="amount"
                     type="number"
                     step="0.01"
                 >
 
-
                 <label>Payment Due / Expiry</label>
-
                 <input
                     id="dueDate"
                     type="date"
                 >
-
 
                 <label>Payment Status</label>
 
@@ -594,7 +571,7 @@ th {
     </div>
 
 
-    <!-- QR AREA -->
+    <!-- QR SECTION -->
 
     <div
         id="qrSection"
@@ -657,22 +634,15 @@ th {
 
         <button
             class="blue"
-            onclick="printStorageLabel()">
-            Print Storage Label
+            onclick="printContainerLabel()">
+            Print Container Label
         </button>
 
 
         <button
             class="green"
             onclick="printCurrentLabel()">
-            Print Current Box
-        </button>
-
-
-        <button
-            class="orange"
-            onclick="printBoxLabels()">
-            Print Box Labels
+            Print Current Label
         </button>
 
 
@@ -692,7 +662,7 @@ th {
     </div>
 
 
-    <!-- DEMO -->
+    <!-- DEMO CONTROLS -->
 
     <div class="card">
 
@@ -757,7 +727,7 @@ const STORAGE_KEY = "MOOVIT_RECORDS";
 
 
 /* =====================================
-   DEVICE
+   DEVICE DETECTION
 ===================================== */
 
 function isPhone() {
@@ -785,6 +755,8 @@ window.addEventListener(
             params.get("data");
 
 
+        /* QR SCAN */
+
         if(qrData) {
 
             showPhoneScan(qrData);
@@ -793,6 +765,8 @@ window.addEventListener(
 
         }
 
+
+        /* ADMIN */
 
         document.body.classList.add(
             "admin-page"
@@ -911,7 +885,7 @@ function showAdmin() {
 
 
 /* =====================================
-   STORAGE
+   DATABASE - DEMO LOCAL STORAGE
 ===================================== */
 
 function getRecords() {
@@ -944,7 +918,7 @@ function saveRecords(records) {
 
 
 /* =====================================
-   REFERENCE
+   REFERENCE NUMBER
 ===================================== */
 
 function nextReference() {
@@ -1186,7 +1160,7 @@ function saveRecord() {
 
 
 /* =====================================
-   CLEAR
+   CLEAR FORM
 ===================================== */
 
 function clearForm() {
@@ -1244,7 +1218,7 @@ function clearForm() {
 
 
 /* =====================================
-   EDIT
+   EDIT RECORD
 ===================================== */
 
 function editRecord(id) {
@@ -1255,12 +1229,14 @@ function editRecord(id) {
         );
 
 
-    if(!record) return;
+    if(!record)
+        return;
 
 
     document.getElementById(
         "editingId"
     ).value = id;
+
 
     document.getElementById(
         "formTitle"
@@ -1274,45 +1250,54 @@ function editRecord(id) {
     ).value =
         record.customer || "";
 
+
     document.getElementById(
         "telephone"
     ).value =
         record.telephone || "";
+
 
     document.getElementById(
         "email"
     ).value =
         record.email || "";
 
+
     document.getElementById(
         "address"
     ).value =
         record.address || "";
+
 
     document.getElementById(
         "item"
     ).value =
         record.item || "";
 
+
     document.getElementById(
         "boxCount"
     ).value =
         record.boxCount || 1;
+
 
     document.getElementById(
         "amount"
     ).value =
         record.amount || "";
 
+
     document.getElementById(
         "dueDate"
     ).value =
         record.dueDate || "";
 
+
     document.getElementById(
         "paymentStatus"
     ).value =
         record.paymentStatus || "Unpaid";
+
 
     document.getElementById(
         "notes"
@@ -1362,7 +1347,7 @@ function deleteRecord(id) {
 
 
 /* =====================================
-   STATUS
+   PAYMENT STATUS
 ===================================== */
 
 function getStatus(record) {
@@ -1386,6 +1371,7 @@ function getStatus(record) {
     const today =
         new Date();
 
+
     today.setHours(
         0,0,0,0
     );
@@ -1395,6 +1381,7 @@ function getStatus(record) {
         new Date(
             record.dueDate
         );
+
 
     due.setHours(
         0,0,0,0
@@ -1539,7 +1526,10 @@ function displayRecords() {
                 const className =
                     status
                         .toLowerCase()
-                        .replace(" ","");
+                        .replace(
+                            " ",
+                            ""
+                        );
 
 
                 const row =
@@ -1603,7 +1593,9 @@ function displayRecords() {
                 `;
 
 
-                table.appendChild(row);
+                table.appendChild(
+                    row
+                );
 
             }
         );
@@ -1772,6 +1764,7 @@ function showQR(id) {
     currentRecord =
         record;
 
+
     currentBox = 1;
 
 
@@ -1826,7 +1819,7 @@ function showQR(id) {
     document.getElementById(
         "qrSection"
     ).scrollIntoView({
-        behavior:"smooth"
+        behavior: "smooth"
     });
 
 }
@@ -1921,6 +1914,7 @@ function renderQR() {
 
 
     image.width = 250;
+
     image.height = 250;
 
 
@@ -1932,10 +1926,10 @@ function renderQR() {
 
 
 /* =====================================
-   STORAGE LABEL
+   PRINT CONTAINER LABEL
 ===================================== */
 
-function printStorageLabel() {
+function printContainerLabel() {
 
     if(!currentRecord)
         return;
@@ -1961,7 +1955,7 @@ function printStorageLabel() {
 
 
     printArea.innerHTML =
-        createStorageLabel(
+        createContainerLabel(
             record,
             qrImage
         );
@@ -1973,10 +1967,10 @@ function printStorageLabel() {
 
 
 /* =====================================
-   STORAGE LABEL HTML
+   CONTAINER LABEL
 ===================================== */
 
-function createStorageLabel(
+function createContainerLabel(
     record,
     qrImage
 ) {
@@ -2015,7 +2009,7 @@ function createStorageLabel(
 
             <img
                 src="${qrImage}"
-                alt="MOOVIT Storage QR"
+                alt="MOOVIT Container QR"
             >
 
             <h3>
@@ -2133,59 +2127,6 @@ function createBoxLabel(
 
 
 /* =====================================
-   PRINT BOX LABELS
-===================================== */
-
-function printBoxLabels() {
-
-    if(!currentRecord)
-        return;
-
-
-    const record =
-        currentRecord;
-
-
-    const printArea =
-        document.getElementById(
-            "printArea"
-        );
-
-
-    printArea.innerHTML = "";
-
-
-    for(
-        let i = 1;
-        i <= record.boxCount;
-        i++
-    ) {
-
-        const qrImage =
-            generateQRImage(
-                qrURL(
-                    record,
-                    i
-                )
-            );
-
-
-        printArea.innerHTML +=
-            createBoxLabel(
-                record,
-                i,
-                qrImage
-            );
-
-    }
-
-
-    window.print();
-
-}
-
-
-/* =====================================
    PRINT ALL
 ===================================== */
 
@@ -2208,11 +2149,9 @@ function printAllLabels() {
     printArea.innerHTML = "";
 
 
-    /*
-       First the generic storage label
-    */
+    /* CONTAINER LABEL FIRST */
 
-    const storageQR =
+    const containerQR =
         generateQRImage(
             qrURL(
                 record,
@@ -2222,15 +2161,13 @@ function printAllLabels() {
 
 
     printArea.innerHTML +=
-        createStorageLabel(
+        createContainerLabel(
             record,
-            storageQR
+            containerQR
         );
 
 
-    /*
-       Then every individual box
-    */
+    /* THEN ALL BOX LABELS */
 
     for(
         let i = 1;
@@ -2238,7 +2175,7 @@ function printAllLabels() {
         i++
     ) {
 
-        const qrImage =
+        const boxQR =
             generateQRImage(
                 qrURL(
                     record,
@@ -2251,7 +2188,7 @@ function printAllLabels() {
             createBoxLabel(
                 record,
                 i,
-                qrImage
+                boxQR
             );
 
     }
@@ -2263,7 +2200,7 @@ function printAllLabels() {
 
 
 /* =====================================
-   CLOSE
+   CLOSE QR
 ===================================== */
 
 function closeQR() {
@@ -2379,7 +2316,7 @@ function showPhoneScan(encoded) {
 
 
 /* =====================================
-   SCAN DISPLAY
+   DISPLAY SCAN
 ===================================== */
 
 function displayScan(data) {
@@ -2397,21 +2334,26 @@ function displayScan(data) {
     ) {
 
         boxInformation = `
+
             <div class="scan-row">
                 <strong>Storage:</strong>
-                ${data.boxCount} items / boxes
+                ${data.boxCount}
+                items / boxes
             </div>
+
         `;
 
     } else {
 
         boxInformation = `
+
             <div class="scan-row">
                 <strong>Box:</strong>
                 ${data.boxNumber}
                 of
                 ${data.boxCount}
             </div>
+
         `;
 
     }
@@ -2430,57 +2372,47 @@ function displayScan(data) {
 
         </div>
 
-
         ${boxInformation}
-
 
         <div class="scan-row">
             <strong>Reference:</strong>
             ${safe(data.reference)}
         </div>
 
-
         <div class="scan-row">
             <strong>Customer:</strong>
             ${safe(data.customer)}
         </div>
-
 
         <div class="scan-row">
             <strong>Item / Contents:</strong>
             ${safe(data.item)}
         </div>
 
-
         <div class="scan-row">
             <strong>Address:</strong>
             ${safe(data.address)}
         </div>
-
 
         <div class="scan-row">
             <strong>Telephone:</strong>
             ${safe(data.telephone)}
         </div>
 
-
         <div class="scan-row">
             <strong>Email:</strong>
             ${safe(data.email)}
         </div>
-
 
         <div class="scan-row">
             <strong>Payment:</strong>
             €${safe(data.amount || "0.00")}
         </div>
 
-
         <div class="scan-row">
             <strong>Expiry:</strong>
             ${safe(data.dueDate || "-")}
         </div>
-
 
         <div class="scan-row">
             <strong>Notes:</strong>
@@ -2503,8 +2435,8 @@ function publicStatus(data) {
     ) {
 
         return {
-            text:"PAID",
-            className:"paid"
+            text: "PAID",
+            className: "paid"
         };
 
     }
@@ -2513,8 +2445,8 @@ function publicStatus(data) {
     if(!data.dueDate) {
 
         return {
-            text:"UNPAID",
-            className:"unpaid"
+            text: "UNPAID",
+            className: "unpaid"
         };
 
     }
@@ -2548,8 +2480,8 @@ function publicStatus(data) {
     if(days < 0) {
 
         return {
-            text:"OVERDUE",
-            className:"overdue"
+            text: "OVERDUE",
+            className: "overdue"
         };
 
     }
@@ -2558,23 +2490,23 @@ function publicStatus(data) {
     if(days <= 30) {
 
         return {
-            text:"DUE SOON",
-            className:"due"
+            text: "DUE SOON",
+            className: "due"
         };
 
     }
 
 
     return {
-        text:"UNPAID",
-        className:"unpaid"
+        text: "UNPAID",
+        className: "unpaid"
     };
 
 }
 
 
 /* =====================================
-   RESET
+   RESET DEMO
 ===================================== */
 
 function resetDemo() {
