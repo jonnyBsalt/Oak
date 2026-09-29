@@ -6,7 +6,6 @@
 
 <title>MOOVIT</title>
 
-<!-- QR GENERATOR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 <style>
@@ -22,8 +21,6 @@ body {
     color: #222;
 }
 
-/* HEADER */
-
 header {
     background: #111;
     color: white;
@@ -36,15 +33,11 @@ header {
     letter-spacing: 3px;
 }
 
-/* MAIN */
-
 .container {
     max-width: 1250px;
     margin: auto;
     padding: 30px;
 }
-
-/* CARDS */
 
 .card {
     background: white;
@@ -53,8 +46,6 @@ header {
     margin-bottom: 25px;
     box-shadow: 0 2px 10px rgba(0,0,0,.08);
 }
-
-/* LOGIN */
 
 .login {
     max-width: 420px;
@@ -81,8 +72,6 @@ textarea {
 label {
     font-weight: bold;
 }
-
-/* BUTTONS */
 
 button {
     background: #111;
@@ -115,7 +104,9 @@ button:hover {
     background: #666;
 }
 
-/* DASHBOARD */
+.blue {
+    background: #245a9b;
+}
 
 .stats {
     display: grid;
@@ -138,15 +129,11 @@ button:hover {
     margin-top: 8px;
 }
 
-/* FORM */
-
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 25px;
 }
-
-/* TABLE */
 
 .table-wrapper {
     overflow-x: auto;
@@ -168,8 +155,6 @@ td {
 th {
     background: #eee;
 }
-
-/* STATUS */
 
 .status {
     display: inline-block;
@@ -199,7 +184,9 @@ th {
     color: #555;
 }
 
-/* QR SECTION */
+.hidden {
+    display: none !important;
+}
 
 .qr-section {
     text-align: center;
@@ -240,15 +227,33 @@ th {
     line-height: 1.6;
 }
 
-/* HIDDEN */
-
-.hidden {
-    display: none !important;
+.storage-type {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 15px 0;
 }
 
-/* MOBILE */
+.scan-page {
+    max-width: 700px;
+    margin: 40px auto;
+}
 
-@media(max-width: 800px) {
+.scan-row {
+    padding: 14px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.scan-row strong {
+    display: inline-block;
+    width: 190px;
+}
+
+.scan-status {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+@media(max-width:800px) {
 
     .stats {
         grid-template-columns: 1fr 1fr;
@@ -260,11 +265,7 @@ th {
 
 }
 
-/*
-   ADMIN IS COMPUTER ONLY
-*/
-
-@media(max-width: 700px) {
+@media(max-width:700px) {
 
     body.admin-page #adminScreen,
     body.admin-page #loginScreen {
@@ -276,8 +277,6 @@ th {
     }
 
 }
-
-/* PRINT */
 
 #printArea {
     display: none;
@@ -318,28 +317,23 @@ th {
         display: block;
     }
 
+    .print-storage-count {
+        font-size: 28px;
+        font-weight: bold;
+        margin: 25px 0;
+    }
+
 }
 
-/* PHONE SCAN */
+/* Hide admin controls on phones */
 
-.scan-page {
-    max-width: 700px;
-    margin: 40px auto;
-}
+@media(max-width:700px) {
 
-.scan-row {
-    padding: 14px 0;
-    border-bottom: 1px solid #ddd;
-}
+    #loginScreen,
+    #adminScreen {
+        display: none !important;
+    }
 
-.scan-row strong {
-    display: inline-block;
-    width: 190px;
-}
-
-.scan-status {
-    text-align: center;
-    margin-bottom: 25px;
 }
 
 </style>
@@ -352,8 +346,6 @@ th {
 </header>
 
 <div class="container">
-
-<!-- COMPUTER MESSAGE -->
 
 <div id="computerMessage" class="card hidden">
 
@@ -395,8 +387,8 @@ th {
 
     <p
         id="loginError"
-        style="color:red;"
-    ></p>
+        style="color:red;">
+    </p>
 
 </div>
 
@@ -406,6 +398,7 @@ th {
 <div id="adminScreen" class="hidden">
 
     <h1>MOOVIT Admin</h1>
+
 
     <!-- DASHBOARD -->
 
@@ -469,30 +462,22 @@ th {
 
                 <label>Customer Name</label>
 
-                <input
-                    id="customer"
-                >
+                <input id="customer">
 
 
                 <label>Telephone</label>
 
-                <input
-                    id="telephone"
-                >
+                <input id="telephone">
 
 
                 <label>Email</label>
 
-                <input
-                    id="email"
-                >
+                <input id="email">
 
 
                 <label>Address</label>
 
-                <textarea
-                    id="address"
-                ></textarea>
+                <textarea id="address"></textarea>
 
             </div>
 
@@ -501,9 +486,7 @@ th {
 
                 <label>Item / Contents</label>
 
-                <input
-                    id="item"
-                >
+                <input id="item">
 
 
                 <label>Number of Boxes</label>
@@ -554,9 +537,7 @@ th {
 
         <label>Notes</label>
 
-        <textarea
-            id="notes"
-        ></textarea>
+        <textarea id="notes"></textarea>
 
 
         <button
@@ -593,7 +574,6 @@ th {
                 <thead>
 
                     <tr>
-
                         <th>Reference</th>
                         <th>Customer</th>
                         <th>Contents</th>
@@ -601,14 +581,11 @@ th {
                         <th>Status</th>
                         <th>Expiry</th>
                         <th>Actions</th>
-
                     </tr>
 
                 </thead>
 
-                <tbody
-                    id="recordsTable">
-                </tbody>
+                <tbody id="recordsTable"></tbody>
 
             </table>
 
@@ -617,13 +594,14 @@ th {
     </div>
 
 
-    <!-- QR -->
+    <!-- QR AREA -->
 
     <div
         id="qrSection"
         class="card qr-section hidden">
 
-        <h2>QR Label</h2>
+        <h2>QR Labels</h2>
+
 
         <div class="label-preview">
 
@@ -663,6 +641,7 @@ th {
 
         <br>
 
+
         <label>
             Select Box
         </label>
@@ -675,17 +654,34 @@ th {
 
         <br><br>
 
+
+        <button
+            class="blue"
+            onclick="printStorageLabel()">
+            Print Storage Label
+        </button>
+
+
         <button
             class="green"
             onclick="printCurrentLabel()">
-            Print Current Label
+            Print Current Box
         </button>
+
+
+        <button
+            class="orange"
+            onclick="printBoxLabels()">
+            Print Box Labels
+        </button>
+
 
         <button
             class="orange"
             onclick="printAllLabels()">
             Print All Labels
         </button>
+
 
         <button
             class="grey"
@@ -735,9 +731,7 @@ th {
             Storage Information
         </h2>
 
-        <div
-            id="scanContent">
-        </div>
+        <div id="scanContent"></div>
 
     </div>
 
@@ -753,19 +747,18 @@ th {
 
 <script>
 
-/* =========================================
+/* =====================================
    SETTINGS
-========================================= */
+===================================== */
 
 const ADMIN_PASSWORD = "admin123";
 
-const STORAGE_KEY =
-    "MOOVIT_RECORDS";
+const STORAGE_KEY = "MOOVIT_RECORDS";
 
 
-/* =========================================
-   DEVICE DETECTION
-========================================= */
+/* =====================================
+   DEVICE
+===================================== */
 
 function isPhone() {
 
@@ -775,9 +768,9 @@ function isPhone() {
 }
 
 
-/* =========================================
+/* =====================================
    START
-========================================= */
+===================================== */
 
 window.addEventListener(
     "load",
@@ -792,11 +785,6 @@ window.addEventListener(
             params.get("data");
 
 
-        /*
-           QR DATA PRESENT
-           → PHONE SCAN PAGE
-        */
-
         if(qrData) {
 
             showPhoneScan(qrData);
@@ -806,14 +794,10 @@ window.addEventListener(
         }
 
 
-        /*
-           NO QR DATA
-           → COMPUTER ADMIN
-        */
-
         document.body.classList.add(
             "admin-page"
         );
+
 
         if(isPhone()) {
 
@@ -848,9 +832,9 @@ window.addEventListener(
 );
 
 
-/* =========================================
+/* =====================================
    LOGIN
-========================================= */
+===================================== */
 
 function showLogin() {
 
@@ -905,9 +889,9 @@ function logout() {
 }
 
 
-/* =========================================
+/* =====================================
    ADMIN
-========================================= */
+===================================== */
 
 function showAdmin() {
 
@@ -926,9 +910,9 @@ function showAdmin() {
 }
 
 
-/* =========================================
+/* =====================================
    STORAGE
-========================================= */
+===================================== */
 
 function getRecords() {
 
@@ -959,9 +943,9 @@ function saveRecords(records) {
 }
 
 
-/* =========================================
+/* =====================================
    REFERENCE
-========================================= */
+===================================== */
 
 function nextReference() {
 
@@ -970,6 +954,7 @@ function nextReference() {
 
     let highest = 0;
 
+
     records.forEach(
         record => {
 
@@ -977,6 +962,7 @@ function nextReference() {
                 parseInt(
                     record.reference
                 );
+
 
             if(
                 !isNaN(number) &&
@@ -990,6 +976,7 @@ function nextReference() {
         }
     );
 
+
     return String(
         highest + 1
     ).padStart(4,"0");
@@ -997,9 +984,9 @@ function nextReference() {
 }
 
 
-/* =========================================
-   SAVE
-========================================= */
+/* =====================================
+   SAVE RECORD
+===================================== */
 
 function saveRecord() {
 
@@ -1105,6 +1092,7 @@ function saveRecord() {
                 r => r.id === editingId
             );
 
+
         records[index] = record;
 
 
@@ -1189,6 +1177,7 @@ function saveRecord() {
 
     displayRecords();
 
+
     alert(
         "Record saved successfully."
     );
@@ -1196,9 +1185,9 @@ function saveRecord() {
 }
 
 
-/* =========================================
+/* =====================================
    CLEAR
-========================================= */
+===================================== */
 
 function clearForm() {
 
@@ -1254,9 +1243,9 @@ function clearForm() {
 }
 
 
-/* =========================================
+/* =====================================
    EDIT
-========================================= */
+===================================== */
 
 function editRecord(id) {
 
@@ -1264,6 +1253,7 @@ function editRecord(id) {
         getRecords().find(
             r => r.id === id
         );
+
 
     if(!record) return;
 
@@ -1338,9 +1328,9 @@ function editRecord(id) {
 }
 
 
-/* =========================================
+/* =====================================
    DELETE
-========================================= */
+===================================== */
 
 function deleteRecord(id) {
 
@@ -1348,7 +1338,8 @@ function deleteRecord(id) {
         !confirm(
             "Delete this record?"
         )
-    ) return;
+    )
+        return;
 
 
     let records =
@@ -1370,9 +1361,9 @@ function deleteRecord(id) {
 }
 
 
-/* =========================================
-   PAYMENT STATUS
-========================================= */
+/* =====================================
+   STATUS
+===================================== */
 
 function getStatus(record) {
 
@@ -1415,18 +1406,12 @@ function getStatus(record) {
         86400000;
 
 
-    if(days < 0) {
-
+    if(days < 0)
         return "Overdue";
 
-    }
 
-
-    if(days <= 30) {
-
+    if(days <= 30)
         return "Due Soon";
-
-    }
 
 
     return "Unpaid";
@@ -1434,14 +1419,15 @@ function getStatus(record) {
 }
 
 
-/* =========================================
+/* =====================================
    DASHBOARD
-========================================= */
+===================================== */
 
 function updateDashboard() {
 
     const records =
         getRecords();
+
 
     let paid = 0;
     let due = 0;
@@ -1454,11 +1440,14 @@ function updateDashboard() {
             const status =
                 getStatus(record);
 
+
             if(status === "Paid")
                 paid++;
 
+
             if(status === "Due Soon")
                 due++;
+
 
             if(status === "Overdue")
                 overdue++;
@@ -1472,15 +1461,18 @@ function updateDashboard() {
     ).textContent =
         records.length;
 
+
     document.getElementById(
         "statPaid"
     ).textContent =
         paid;
 
+
     document.getElementById(
         "statDue"
     ).textContent =
         due;
+
 
     document.getElementById(
         "statOverdue"
@@ -1490,9 +1482,9 @@ function updateDashboard() {
 }
 
 
-/* =========================================
+/* =====================================
    RECORD TABLE
-========================================= */
+===================================== */
 
 function displayRecords() {
 
@@ -1530,6 +1522,7 @@ function displayRecords() {
                         record.item
                     ).toLowerCase();
 
+
                 return text.includes(
                     search
                 );
@@ -1543,13 +1536,10 @@ function displayRecords() {
                     getStatus(record);
 
 
-                let className =
+                const className =
                     status
                         .toLowerCase()
-                        .replace(
-                            " ",
-                            ""
-                        );
+                        .replace(" ","");
 
 
                 const row =
@@ -1579,12 +1569,10 @@ function displayRecords() {
                     </td>
 
                     <td>
-
                         <span
                             class="status ${className}">
                             ${status}
                         </span>
-
                     </td>
 
                     <td>
@@ -1615,9 +1603,7 @@ function displayRecords() {
                 `;
 
 
-                table.appendChild(
-                    row
-                );
+                table.appendChild(row);
 
             }
         );
@@ -1625,18 +1611,19 @@ function displayRecords() {
 }
 
 
-/* =========================================
+/* =====================================
    QR DATA
-========================================= */
+===================================== */
 
 function createQRData(
     record,
-    boxNumber
+    boxNumber = null
 ) {
 
     const data = {
 
-        id: record.id,
+        id:
+            record.id,
 
         reference:
             record.reference,
@@ -1656,7 +1643,8 @@ function createQRData(
         item:
             record.item,
 
-        boxNumber,
+        boxNumber:
+            boxNumber,
 
         boxCount:
             record.boxCount,
@@ -1708,13 +1696,13 @@ function createQRData(
 }
 
 
-/* =========================================
+/* =====================================
    QR URL
-========================================= */
+===================================== */
 
 function qrURL(
     record,
-    boxNumber
+    boxNumber = null
 ) {
 
     return (
@@ -1730,14 +1718,11 @@ function qrURL(
 }
 
 
-/* =========================================
-   GENERATE QR IMAGE
-========================================= */
+/* =====================================
+   QR IMAGE
+===================================== */
 
-function generateQRImage(
-    text,
-    size = 300
-) {
+function generateQRImage(text) {
 
     const qr =
         qrcode(
@@ -1759,14 +1744,18 @@ function generateQRImage(
 }
 
 
-/* =========================================
-   SHOW QR
-========================================= */
+/* =====================================
+   CURRENT RECORD
+===================================== */
 
 let currentRecord = null;
 
 let currentBox = 1;
 
+
+/* =====================================
+   SHOW QR
+===================================== */
 
 function showQR(id) {
 
@@ -1776,7 +1765,8 @@ function showQR(id) {
         );
 
 
-    if(!record) return;
+    if(!record)
+        return;
 
 
     currentRecord =
@@ -1808,6 +1798,7 @@ function showQR(id) {
 
         option.value = i;
 
+
         option.textContent =
             "Box " +
             i +
@@ -1835,15 +1826,15 @@ function showQR(id) {
     document.getElementById(
         "qrSection"
     ).scrollIntoView({
-        behavior: "smooth"
+        behavior:"smooth"
     });
 
 }
 
 
-/* =========================================
+/* =====================================
    CHANGE BOX
-========================================= */
+===================================== */
 
 function changeBox() {
 
@@ -1860,9 +1851,9 @@ function changeBox() {
 }
 
 
-/* =========================================
-   RENDER QR
-========================================= */
+/* =====================================
+   RENDER CURRENT QR
+===================================== */
 
 function renderQR() {
 
@@ -1930,7 +1921,6 @@ function renderQR() {
 
 
     image.width = 250;
-
     image.height = 250;
 
 
@@ -1941,9 +1931,107 @@ function renderQR() {
 }
 
 
-/* =========================================
-   PRINT CURRENT
-========================================= */
+/* =====================================
+   STORAGE LABEL
+===================================== */
+
+function printStorageLabel() {
+
+    if(!currentRecord)
+        return;
+
+
+    const record =
+        currentRecord;
+
+
+    const qrImage =
+        generateQRImage(
+            qrURL(
+                record,
+                null
+            )
+        );
+
+
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+
+    printArea.innerHTML =
+        createStorageLabel(
+            record,
+            qrImage
+        );
+
+
+    window.print();
+
+}
+
+
+/* =====================================
+   STORAGE LABEL HTML
+===================================== */
+
+function createStorageLabel(
+    record,
+    qrImage
+) {
+
+    return `
+
+        <div class="print-label">
+
+            <h1>
+                MOOVIT
+            </h1>
+
+            <h2>
+                Customer:
+                ${safe(record.customer)}
+            </h2>
+
+            <h2>
+                Reference No.:
+                ${safe(record.reference)}
+            </h2>
+
+            <div class="print-storage-count">
+                ${record.boxCount} ITEMS / BOXES
+            </div>
+
+            <p>
+                <strong>
+                    Storage Contents
+                </strong>
+            </p>
+
+            <p>
+                ${safe(record.item)}
+            </p>
+
+            <img
+                src="${qrImage}"
+                alt="MOOVIT Storage QR"
+            >
+
+            <h3>
+                SCAN TO IDENTIFY STORAGE
+            </h3>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================
+   PRINT CURRENT BOX
+===================================== */
 
 function printCurrentLabel() {
 
@@ -1955,7 +2043,7 @@ function printCurrentLabel() {
         currentRecord;
 
 
-    const image =
+    const qrImage =
         generateQRImage(
             qrURL(
                 record,
@@ -1971,110 +2059,23 @@ function printCurrentLabel() {
 
 
     printArea.innerHTML =
-        createPrintableLabel(
+        createBoxLabel(
             record,
             currentBox,
-            image
+            qrImage
         );
 
-
-    /*
-       Wait until image is loaded.
-       Then print.
-    */
-
-    const img =
-        printArea.querySelector(
-            "img"
-        );
-
-
-    if(img.complete) {
-
-        window.print();
-
-    } else {
-
-        img.onload =
-            function() {
-
-                window.print();
-
-            };
-
-    }
-
-}
-
-
-/* =========================================
-   PRINT ALL
-========================================= */
-
-function printAllLabels() {
-
-    if(!currentRecord)
-        return;
-
-
-    const record =
-        currentRecord;
-
-
-    const printArea =
-        document.getElementById(
-            "printArea"
-        );
-
-
-    printArea.innerHTML = "";
-
-
-    /*
-       Generate every QR first.
-    */
-
-    for(
-        let i = 1;
-        i <= record.boxCount;
-        i++
-    ) {
-
-        const image =
-            generateQRImage(
-                qrURL(
-                    record,
-                    i
-                )
-            );
-
-
-        printArea.innerHTML +=
-            createPrintableLabel(
-                record,
-                i,
-                image
-            );
-
-    }
-
-
-    /*
-       All QR images are already
-       data URLs, so printing can
-       start immediately.
-    */
 
     window.print();
 
 }
 
 
-/* =========================================
-   PRINT LABEL HTML
-========================================= */
+/* =====================================
+   BOX LABEL
+===================================== */
 
-function createPrintableLabel(
+function createBoxLabel(
     record,
     boxNumber,
     qrImage
@@ -2117,7 +2118,7 @@ function createPrintableLabel(
 
             <img
                 src="${qrImage}"
-                alt="MOOVIT QR Code"
+                alt="MOOVIT Box QR"
             >
 
             <h3>
@@ -2131,9 +2132,139 @@ function createPrintableLabel(
 }
 
 
-/* =========================================
-   CLOSE QR
-========================================= */
+/* =====================================
+   PRINT BOX LABELS
+===================================== */
+
+function printBoxLabels() {
+
+    if(!currentRecord)
+        return;
+
+
+    const record =
+        currentRecord;
+
+
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+
+    printArea.innerHTML = "";
+
+
+    for(
+        let i = 1;
+        i <= record.boxCount;
+        i++
+    ) {
+
+        const qrImage =
+            generateQRImage(
+                qrURL(
+                    record,
+                    i
+                )
+            );
+
+
+        printArea.innerHTML +=
+            createBoxLabel(
+                record,
+                i,
+                qrImage
+            );
+
+    }
+
+
+    window.print();
+
+}
+
+
+/* =====================================
+   PRINT ALL
+===================================== */
+
+function printAllLabels() {
+
+    if(!currentRecord)
+        return;
+
+
+    const record =
+        currentRecord;
+
+
+    const printArea =
+        document.getElementById(
+            "printArea"
+        );
+
+
+    printArea.innerHTML = "";
+
+
+    /*
+       First the generic storage label
+    */
+
+    const storageQR =
+        generateQRImage(
+            qrURL(
+                record,
+                null
+            )
+        );
+
+
+    printArea.innerHTML +=
+        createStorageLabel(
+            record,
+            storageQR
+        );
+
+
+    /*
+       Then every individual box
+    */
+
+    for(
+        let i = 1;
+        i <= record.boxCount;
+        i++
+    ) {
+
+        const qrImage =
+            generateQRImage(
+                qrURL(
+                    record,
+                    i
+                )
+            );
+
+
+        printArea.innerHTML +=
+            createBoxLabel(
+                record,
+                i,
+                qrImage
+            );
+
+    }
+
+
+    window.print();
+
+}
+
+
+/* =====================================
+   CLOSE
+===================================== */
 
 function closeQR() {
 
@@ -2146,9 +2277,9 @@ function closeQR() {
 }
 
 
-/* =========================================
+/* =====================================
    PHONE SCAN
-========================================= */
+===================================== */
 
 function showPhoneScan(encoded) {
 
@@ -2163,17 +2294,20 @@ function showPhoneScan(encoded) {
         "hidden"
     );
 
+
     document.getElementById(
         "adminScreen"
     ).classList.add(
         "hidden"
     );
 
+
     document.getElementById(
         "computerMessage"
     ).classList.add(
         "hidden"
     );
+
 
     document.getElementById(
         "scanScreen"
@@ -2220,9 +2354,7 @@ function showPhoneScan(encoded) {
             JSON.parse(json);
 
 
-        displayScan(
-            data
-        );
+        displayScan(data);
 
 
     } catch(error) {
@@ -2246,16 +2378,43 @@ function showPhoneScan(encoded) {
 }
 
 
-/* =========================================
+/* =====================================
    SCAN DISPLAY
-========================================= */
+===================================== */
 
 function displayScan(data) {
 
     const status =
-        publicStatus(
-            data
-        );
+        publicStatus(data);
+
+
+    let boxInformation;
+
+
+    if(
+        data.boxNumber === null ||
+        data.boxNumber === undefined
+    ) {
+
+        boxInformation = `
+            <div class="scan-row">
+                <strong>Storage:</strong>
+                ${data.boxCount} items / boxes
+            </div>
+        `;
+
+    } else {
+
+        boxInformation = `
+            <div class="scan-row">
+                <strong>Box:</strong>
+                ${data.boxNumber}
+                of
+                ${data.boxCount}
+            </div>
+        `;
+
+    }
 
 
     document.getElementById(
@@ -2272,6 +2431,9 @@ function displayScan(data) {
         </div>
 
 
+        ${boxInformation}
+
+
         <div class="scan-row">
             <strong>Reference:</strong>
             ${safe(data.reference)}
@@ -2281,14 +2443,6 @@ function displayScan(data) {
         <div class="scan-row">
             <strong>Customer:</strong>
             ${safe(data.customer)}
-        </div>
-
-
-        <div class="scan-row">
-            <strong>Box:</strong>
-            ${data.boxNumber}
-            of
-            ${data.boxCount}
         </div>
 
 
@@ -2338,9 +2492,9 @@ function displayScan(data) {
 }
 
 
-/* =========================================
+/* =====================================
    PUBLIC STATUS
-========================================= */
+===================================== */
 
 function publicStatus(data) {
 
@@ -2349,8 +2503,8 @@ function publicStatus(data) {
     ) {
 
         return {
-            text: "PAID",
-            className: "paid"
+            text:"PAID",
+            className:"paid"
         };
 
     }
@@ -2359,8 +2513,8 @@ function publicStatus(data) {
     if(!data.dueDate) {
 
         return {
-            text: "UNPAID",
-            className: "unpaid"
+            text:"UNPAID",
+            className:"unpaid"
         };
 
     }
@@ -2368,6 +2522,7 @@ function publicStatus(data) {
 
     const today =
         new Date();
+
 
     today.setHours(
         0,0,0,0
@@ -2378,6 +2533,7 @@ function publicStatus(data) {
         new Date(
             data.dueDate
         );
+
 
     due.setHours(
         0,0,0,0
@@ -2392,8 +2548,8 @@ function publicStatus(data) {
     if(days < 0) {
 
         return {
-            text: "OVERDUE",
-            className: "overdue"
+            text:"OVERDUE",
+            className:"overdue"
         };
 
     }
@@ -2402,24 +2558,24 @@ function publicStatus(data) {
     if(days <= 30) {
 
         return {
-            text: "DUE SOON",
-            className: "due"
+            text:"DUE SOON",
+            className:"due"
         };
 
     }
 
 
     return {
-        text: "UNPAID",
-        className: "unpaid"
+        text:"UNPAID",
+        className:"unpaid"
     };
 
 }
 
 
-/* =========================================
+/* =====================================
    RESET
-========================================= */
+===================================== */
 
 function resetDemo() {
 
@@ -2458,9 +2614,9 @@ function resetDemo() {
 }
 
 
-/* =========================================
+/* =====================================
    SAFE HTML
-========================================= */
+===================================== */
 
 function safe(value) {
 
