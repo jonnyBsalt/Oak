@@ -123,6 +123,73 @@ button:hover {
     min-width: 130px;
 }
 
+.client-search {
+    width: 100%;
+    margin: 0 0 15px;
+}
+
+.client-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+.client-main {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.client-ref {
+    font-weight: bold;
+    min-width: 55px;
+}
+
+.client-name {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.client-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.client-actions button {
+    width: auto;
+    margin: 0;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+@media(max-width:700px) {
+
+    .client-row {
+        flex-wrap: wrap;
+    }
+
+    .client-main {
+        width: 100%;
+    }
+
+    .client-actions {
+        width: 100%;
+    }
+
+    .client-actions button {
+        flex: 1;
+    }
+
+}
+
 .hidden {
     display: none !important;
 }
@@ -506,17 +573,28 @@ button:hover {
     </div>
 
 
-    <!-- RECORDS -->
+   <!-- CLIENT / JOB LIST -->
 
-    <div class="card">
+<div
+    id="recordsCard"
+    class="card"
+>
 
-        <h2>
-            Records
-        </h2>
+    <h2>
+        Client / Job List
+    </h2>
 
-        <div id="records"></div>
+    <input
+        id="clientSearch"
+        class="client-search"
+        type="search"
+        placeholder="Search customer name..."
+        oninput="filterRecords()"
+    >
 
-    </div>
+    <div id="records"></div>
+
+</div>
 
 
     <!-- QR -->
