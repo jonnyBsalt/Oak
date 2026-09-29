@@ -227,9 +227,9 @@ button:hover {
 @media print {
 
     @page {
-        size: 62mm auto;
-        margin: 0;
-    }
+    size: 62mm 80mm;
+    margin: 0;
+}
 
     html,
     body {
@@ -249,26 +249,26 @@ button:hover {
         visibility: visible;
     }
 
-    #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 62mm !important;
-        height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden;
-    }
+   #printArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 62mm !important;
+    height: 80mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
 
-    .print-label {
-        width: 62mm !important;
-        height: auto !important;
-        margin: 0 !important;
-        padding: 2mm !important;
-        text-align: center;
-        page-break-after: always;
-        break-after: page;
-    }
+   .print-label {
+    width: 62mm !important;
+    height: 80mm !important;
+    margin: 0 !important;
+    padding: 2mm !important;
+    text-align: center;
+    page-break-after: always;
+    break-after: page;
+}
 
     .print-label img {
         width: 50mm !important;
