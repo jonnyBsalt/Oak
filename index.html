@@ -1,1 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOOVIT</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    color: #222;
+}
+
+header {
+    background: #111;
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+input,
+select,
+textarea,
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    min-height: 90px;
+}
+
+button {
+    background: #111;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #333;
+}
+
+.orange {
+    background: #f58220;
+}
+
+.orange:hover {
+    background: #d96d0d;
+}
+
+.green {
+    background: #198754;
+}
+
+.red {
+    background: #c62828;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: white;
+    padding: 18px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.stat-number {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.record {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.record strong {
+    display: inline-block;
+    min-width: 130px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.login {
+    max-width: 400px;
+    margin: 80px auto;
+}
+
+.qr-preview {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.qr-preview img {
+    width: 260px;
+    height: 260px;
+}
+
+.scan-box {
+    max-width: 600px;
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+}
+
+.scan-logo {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.scan-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.status {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.status-paid {
+    background: #198754;
+}
+
+.status-unpaid {
+    background: #777;
+}
+
+.status-due {
+    background: #f58220;
+}
+
+.status-overdue {
+    background: #c62828;
+}
+
+.print-label {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    text-align: center;
+}
+
+.print-label img {
+    width: 300px;
+    height: 300px;
+}
+
+.print-label h1 {
+    font-size: 34px;
+    margin: 10px 0;
+}
+
+.print-label h2 {
+    font-size: 28px;
+}
+
+.print-label p {
+    font-size: 20px;
+    margin: 8px;
+}
+
+@media(max-width:700px) {
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container {
+        padding: 10px;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #printArea,
+    #printArea * {
+        visibility: visible;
+    }
+
+    #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    @page {
+        margin: 10mm;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    MOOVIT
+</header>
+
+<!-- PHONE MESSAGE -->
+
+<div id="computerMessage" class="hidden">
+
+    <div class="scan-box">
+
+        <div class="scan-logo">
+            MOOVIT
+        </div>
+
+        <h2>
+            Administration
+        </h2>
+
+        <p>
+            Please use a computer to access the MOOVIT administration system.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div id="loginScreen" class="login card">
+
+    <h2>
+        MOOVIT Admin
+    </h2>
+
+    <input
+        type="email"
+        id="emailLogin"
+        placeholder="Email"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button onclick="login()">
+        LOGIN
+    </button>
+
+    <p
+        id="loginError"
+        style="color:red;"
+    ></p>
+
+</div>
+
+
+<!-- ADMIN -->
+
+<div id="adminScreen" class="hidden">
+
+<div class="container">
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard">
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="totalRecords"
+            >
+                0
+            </div>
+
+            Records
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="paidRecords"
+            >
+                0
+            </div>
+
+            Paid
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="dueRecords"
+            >
+                0
+            </div>
+
+            Due Soon
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="overdueRecords"
+            >
+                0
+            </div>
+
+            Overdue
+
+        </div>
+
+    </div>
+
+
+    <!-- CREATE RECORD -->
+
+    <div class="card">
+
+        <h2>
+            Create Customer / Record
+        </h2>
+
+        <input
+            id="customer"
+            placeholder="Customer Name"
+        >
+
+        <input
+            id="telephone"
+            placeholder="Telephone"
+        >
+
+        <input
+            id="email"
+            placeholder="Email"
+        >
+
+        <input
+            id="address"
+            placeholder="Address"
+        >
+
+        <input
+            id="item"
+            placeholder="Item / Box / Asset / Contents"
+        >
+
+        <input
+            id="amount"
+            type="number"
+            step="0.01"
+            placeholder="Payment Amount (€)"
+        >
+
+        <label>
+            Payment Due / Expiry
+        </label>
+
+        <input
+            id="dueDate"
+            type="date"
+        >
+
+        <label>
+            Payment Status
+        </label>
+
+        <select id="paymentStatus">
+
+            <option value="Unpaid">
+                Unpaid
+            </option>
+
+            <option value="Paid">
+                Paid
+            </option>
+
+        </select>
+
+        <label>
+            Number of Boxes
+        </label>
+
+        <input
+            id="boxCount"
+            type="number"
+            min="1"
+            value="1"
+        >
+
+        <textarea
+            id="notes"
+            placeholder="Notes"
+        ></textarea>
+
+        <button
+            class="orange"
+            onclick="createRecord()"
+        >
+            CREATE RECORD
+        </button>
+
+    </div>
+
+
+    <!-- RECORDS -->
+
+    <div class="card">
+
+        <h2>
+            Records
+        </h2>
+
+        <div id="records"></div>
+
+    </div>
+
+
+    <!-- QR -->
+
+    <div
+        id="qrCard"
+        class="card hidden"
+    >
+
+        <h2>
+            QR Label
+        </h2>
+
+        <div id="qrInfo"></div>
+
+        <label>
+            Box
+        </label>
+
+        <select
+            id="boxSelector"
+            onchange="updateQRPreview()"
+        ></select>
+
+        <div class="qr-preview">
+
+            <img
+                id="qrPreview"
+                src=""
+            >
+
+        </div>
+
+        <button
+            class="green"
+            onclick="printContainerLabel()"
+        >
+            PRINT CONTAINER LABEL
+        </button>
+
+        <button
+            onclick="printCurrentLabel()"
+        >
+            PRINT CURRENT LABEL
+        </button>
+
+        <button
+            class="orange"
+            onclick="printAllLabels()"
+        >
+            PRINT ALL LABELS
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- PRINT AREA -->
+
+<div id="printArea"></div>
+
+
+<script>
+
+/* -------------------------
+   SUPABASE
+------------------------- */
+
+const SUPABASE_URL =
+    "https://vagzpzqquycimnvyzbyi.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_9C12eHJumoVv4qf5l458AQ_QOKs-N6A";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+let records = [];
+
+let selectedRecord = null;
+
+let selectedBox = 1;
+
+
+/* -------------------------
+   PHONE
+------------------------- */
+
+function isPhone() {
+
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(
+        navigator.userAgent
+    );
+
+}
+
+
+/* -------------------------
+   LOGIN
+------------------------- */
+
+async function login() {
+
+    const email =
+        document.getElementById(
+            "emailLogin"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const error =
+        document.getElementById(
+            "loginError"
+        );
+
+    error.textContent = "";
+
+
+    if(!email || !password) {
+
+        error.textContent =
+            "Please enter your email and password";
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+        });
+
+
+    if(result.error) {
+
+        error.textContent =
+            result.error.message;
+
+        return;
+
+    }
+
+
+    await showAdmin();
+
+}
+
+
+/* -------------------------
+   SHOW ADMIN
+------------------------- */
+
+async function showAdmin() {
+
+    document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("adminScreen")
+        .classList.remove("hidden");
+
+    await loadRecords();
+
+}
+
+
+/* -------------------------
+   LOAD RECORDS
+------------------------- */
+
+async function loadRecords() {
+
+    const result =
+        await supabaseClient
+            .from("moovit_records")
+            .select("*")
+            .eq("archived", false)
+            .order(
+                "reference_no",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if(result.error) {
+
+        alert(
+            "Could not load records: " +
+            result.error.message
+        );
+
+        return;
+
+    }
+
+
+    records =
+        result.data || [];
+
+
+    displayRecords();
+
+    updateDashboard();
+
+}
+
+
+/* -------------------------
+   CREATE RECORD
+------------------------- */
+
+async function createRecord() {
+
+    const userResult =
+        await supabaseClient.auth.getUser();
+
+    const user =
+        userResult.data.user;
+
+
+    if(!user) {
+
+        alert(
+            "Please log in first."
+        );
+
+        return;
+
+    }
+
+
+    const customer =
+        document
+            .getElementById("customer")
+            .value
+            .trim();
+
+
+    if(!customer) {
+
+        alert(
+            "Please enter a customer name."
+        );
+
+        return;
+
+    }
+
+
+    const record = {
+
+        customer_name:
+            customer,
+
+        telephone:
+            document
+                .getElementById("telephone")
+                .value
+                .trim(),
+
+        email:
+            document
+                .getElementById("email")
+                .value
+                .trim(),
+
+        address:
+            document
+                .getElementById("address")
+                .value
+                .trim(),
+
+        item_contents:
+            document
+                .getElementById("item")
+                .value
+                .trim(),
+
+        payment_amount:
+            document
+                .getElementById("amount")
+                .value === ""
+                ?
+                null
+                :
+                Number(
+                    document
+                        .getElementById("amount")
+                        .value
+                ),
+
+        payment_due:
+            document
+                .getElementById("dueDate")
+                .value
+                || null,
+
+        payment_status:
+            document
+                .getElementById("paymentStatus")
+                .value,
+
+        box_count:
+            parseInt(
+                document
+                    .getElementById("boxCount")
+                    .value
+            ) || 1,
+
+        notes:
+            document
+                .getElementById("notes")
+                .value
+                .trim(),
+
+        owner_id:
+            user.id
+
+    };
+
+
+    const result =
+        await supabaseClient
+            .from("moovit_records")
+            .insert(record)
+            .select("*")
+            .single();
+
+
+    if(result.error) {
+
+        alert(
+            "Could not create record: " +
+            result.error.message
+        );
+
+        return;
+
+    }
+
+
+    records.push(
+        result.data
+    );
+
+
+    records.sort(
+        (a,b) =>
+            Number(a.reference_no) -
+            Number(b.reference_no)
+    );
+
+
+    displayRecords();
+
+    updateDashboard();
+
+
+    alert(
+        "Record created. Reference: " +
+        String(
+            result.data.reference_no
+        ).padStart(4,"0")
+    );
+
+
+    document
+        .querySelectorAll(
+            "#adminScreen input, #adminScreen textarea"
+        )
+        .forEach(
+            function(el) {
+
+                if(
+                    el.id !== "boxCount"
+                ) {
+
+                    el.value = "";
+
+                }
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "paymentStatus"
+        )
+        .value = "Unpaid";
+
+
+    document
+        .getElementById(
+            "boxCount"
+        )
+        .value = "1";
+
+}
+
+
+/* -------------------------
+   DISPLAY RECORDS
+------------------------- */
+
+function displayRecords() {
+
+    const container =
+        document.getElementById(
+            "records"
+        );
+
+
+    container.innerHTML = "";
+
+
+    records.forEach(
+        function(record) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "record";
+
+
+            const reference =
+                String(
+                    record.reference_no
+                ).padStart(
+                    4,
+                    "0"
+                );
+
+
+            div.innerHTML =
+
+                "<strong>Reference:</strong> " +
+                safe(reference) +
+                "<br>" +
+
+                "<strong>Customer:</strong> " +
+                safe(
+                    record.customer_name
+                ) +
+                "<br>" +
+
+                "<strong>Item:</strong> " +
+                safe(
+                    record.item_contents
+                ) +
+                "<br>" +
+
+                "<strong>Boxes:</strong> " +
+                safe(
+                    record.box_count
+                ) +
+                "<br>" +
+
+                "<strong>Payment:</strong> €" +
+                safe(
+                    record.payment_amount === null
+                    ?
+                    "0.00"
+                    :
+                    record.payment_amount
+                ) +
+                "<br>" +
+
+                "<strong>Expiry:</strong> " +
+                safe(
+                    record.payment_due || "-"
+                ) +
+                "<br>" +
+
+                "<strong>Status:</strong> " +
+                safe(
+                    record.payment_status
+                ) +
+
+                "<br><br>" +
+
+                "<button onclick=\"showQR('" +
+                record.id +
+                "')\">" +
+
+                "QR / LABELS" +
+
+                "</button>";
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+/* -------------------------
+   DASHBOARD
+------------------------- */
+
+function updateDashboard() {
+
+    document
+        .getElementById(
+            "totalRecords"
+        )
+        .textContent =
+        records.length;
+
+
+    document
+        .getElementById(
+            "paidRecords"
+        )
+        .textContent =
+
+        records.filter(
+            function(r) {
+
+                return r.payment_status === "Paid";
+
+            }
+        ).length;
+
+
+    document
+        .getElementById(
+            "dueRecords"
+        )
+        .textContent =
+
+        records.filter(
+            function(r) {
+
+                return publicStatus(r) === "Due Soon";
+
+            }
+        ).length;
+
+
+    document
+        .getElementById(
+            "overdueRecords"
+        )
+        .textContent =
+
+        records.filter(
+            function(r) {
+
+                return publicStatus(r) === "Overdue";
+
+            }
+        ).length;
+
+}
+
+
+/* -------------------------
+   PAYMENT STATUS
+------------------------- */
+
+function publicStatus(record) {
+
+    if(
+        record.payment_status === "Paid"
+    ) {
+
+        return "Paid";
+
+    }
+
+
+    if(
+        !record.payment_due
+    ) {
+
+        return "Unpaid";
+
+    }
+
+
+    const today =
+        new Date();
+
+    const due =
+        new Date(
+            record.payment_due
+        );
+
+
+    today.setHours(
+        0,0,0,0
+    );
+
+    due.setHours(
+        0,0,0,0
+    );
+
+
+    if(
+        due < today
+    ) {
+
+        return "Overdue";
+
+    }
+
+
+    const difference =
+        (
+            due - today
+        ) /
+        (
+            1000 *
+            60 *
+            60 *
+            24
+        );
+
+
+    if(
+        difference <= 30
+    ) {
+
+        return "Due Soon";
+
+    }
+
+
+    return "Unpaid";
+
+}
+
+
+/* -------------------------
+   SHOW QR
+------------------------- */
+
+function showQR(id) {
+
+    selectedRecord =
+        records.find(
+            function(r) {
+
+                return r.id === id;
+
+            }
+        );
+
+
+    if(!selectedRecord) {
+
+        return;
+
+    }
+
+
+    selectedBox = 1;
+
+
+    const selector =
+        document.getElementById(
+            "boxSelector"
+        );
+
+
+    selector.innerHTML = "";
+
+
+    for(
+        let i = 1;
+        i <= selectedRecord.box_count;
+        i++
+    ) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value = i;
+
+
+        option.textContent =
+            "Box " +
+            i +
+            " of " +
+            selectedRecord.box_count;
+
+
+        selector.appendChild(
+            option
+        );
+
+    }
+
+
+    document
+        .getElementById(
+            "qrCard"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    document
+        .getElementById(
+            "qrInfo"
+        )
+        .innerHTML =
+
+        "<strong>" +
+        safe(
+            selectedRecord.customer_name
+        ) +
+        "</strong><br>" +
+
+        "Reference: " +
+        safe(
+            String(
+                selectedRecord.reference_no
+            ).padStart(
+                4,
+                "0"
+            )
+        );
+
+
+    updateQRPreview();
+
+}
+
+
+/* -------------------------
+   QR URL
+------------------------- */
+
+function qrURL(
+    record,
+    boxNumber
+) {
+
+    let url =
+
+        window.location.origin +
+        window.location.pathname +
+        "?token=" +
+        encodeURIComponent(
+            record.qr_token
+        );
+
+
+    if(
+        boxNumber !== null
+    ) {
+
+        url +=
+            "&box=" +
+            encodeURIComponent(
+                boxNumber
+            );
+
+    }
+
+
+    return url;
+
+}
+
+
+/* -------------------------
+   QR IMAGE
+------------------------- */
+
+function generateQRImage(text) {
+
+    const qr =
+        qrcode(
+            0,
+            "M"
+        );
+
+
+    qr.addData(text);
+
+    qr.make();
+
+
+    return qr.createDataURL(
+        6,
+        2
+    );
+
+}
+
+
+/* -------------------------
+   QR PREVIEW
+------------------------- */
+
+function updateQRPreview() {
+
+    if(
+        !selectedRecord
+    ) {
+
+        return;
+
+    }
+
+
+    selectedBox =
+        parseInt(
+            document
+                .getElementById(
+                    "boxSelector"
+                )
+                .value
+        ) || 1;
+
+
+    document
+        .getElementById(
+            "qrPreview"
+        )
+        .src =
+
+        generateQRImage(
+            qrURL(
+                selectedRecord,
+                selectedBox
+            )
+        );
+
+}
+
+
+/* -------------------------
+   CONTAINER QR
+------------------------- */
+
+function getContainerQR() {
+
+    return qrURL(
+        selectedRecord,
+        null
+    );
+
+}
+
+
+/* -------------------------
+   PRINT CONTAINER
+------------------------- */
+
+function printContainerLabel() {
+
+    if(
+        !selectedRecord
+    ) {
+
+        return;
+
+    }
+
+
+    const qr =
+        generateQRImage(
+            getContainerQR()
+        );
+
+
+    document
+        .getElementById(
+            "printArea"
+        )
+        .innerHTML =
+
+        '<div class="print-label">' +
+
+        '<h1>MOOVIT</h1>' +
+
+        '<h2>' +
+        safe(
+            selectedRecord.customer_name
+        ) +
+        '</h2>' +
+
+        '<h2>' +
+        selectedRecord.box_count +
+        ' ITEMS / BOXES' +
+        '</h2>' +
+
+        '<img src="' +
+        qr +
+        '">' +
+
+        '<p>Reference: ' +
+        safe(
+            String(
+                selectedRecord.reference_no
+            ).padStart(
+                4,
+                "0"
+            )
+        ) +
+        '</p>' +
+
+        '<p>Storage Container</p>' +
+
+        '</div>';
+
+
+    window.print();
+
+}
+
+
+/* -------------------------
+   PRINT CURRENT
+------------------------- */
+
+function printCurrentLabel() {
+
+    if(
+        !selectedRecord
+    ) {
+
+        return;
+
+    }
+
+
+    const qr =
+        generateQRImage(
+            qrURL(
+                selectedRecord,
+                selectedBox
+            )
+        );
+
+
+    document
+        .getElementById(
+            "printArea"
+        )
+        .innerHTML =
+
+        '<div class="print-label">' +
+
+        '<h1>MOOVIT</h1>' +
+
+        '<h2>BOX ' +
+        selectedBox +
+        ' OF ' +
+        selectedRecord.box_count +
+        '</h2>' +
+
+        '<img src="' +
+        qr +
+        '">' +
+
+        '<p>' +
+        safe(
+            selectedRecord.customer_name
+        ) +
+        '</p>' +
+
+        '<p>Reference: ' +
+        safe(
+            String(
+                selectedRecord.reference_no
+            ).padStart(
+                4,
+                "0"
+            )
+        ) +
+        '</p>' +
+
+        '<p>' +
+        safe(
+            selectedRecord.item_contents
+        ) +
+        '</p>' +
+
+        '</div>';
+
+
+    window.print();
+
+}
+
+
+/* -------------------------
+   PRINT ALL
+------------------------- */
+
+function printAllLabels() {
+
+    if(
+        !selectedRecord
+    ) {
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    html +=
+
+        '<div class="print-label">' +
+
+        '<h1>MOOVIT</h1>' +
+
+        '<h2>' +
+        safe(
+            selectedRecord.customer_name
+        ) +
+        '</h2>' +
+
+        '<h2>' +
+        selectedRecord.box_count +
+        ' ITEMS / BOXES' +
+        '</h2>' +
+
+        '<img src="' +
+        generateQRImage(
+            getContainerQR()
+        ) +
+        '">' +
+
+        '<p>Reference: ' +
+        safe(
+            String(
+                selectedRecord.reference_no
+            ).padStart(
+                4,
+                "0"
+            )
+        ) +
+        '</p>' +
+
+        '<p>Storage Container</p>' +
+
+        '</div>';
+
+
+    for(
+        let i = 1;
+        i <= selectedRecord.box_count;
+        i++
+    ) {
+
+        html +=
+
+            '<div class="print-label" ' +
+            'style="page-break-before:always;">' +
+
+            '<h1>MOOVIT</h1>' +
+
+            '<h2>BOX ' +
+            i +
+            ' OF ' +
+            selectedRecord.box_count +
+            '</h2>' +
+
+            '<img src="' +
+            generateQRImage(
+                qrURL(
+                    selectedRecord,
+                    i
+                )
+            ) +
+            '">' +
+
+            '<p>' +
+            safe(
+                selectedRecord.customer_name
+            ) +
+            '</p>' +
+
+            '<p>Reference: ' +
+            safe(
+                String(
+                    selectedRecord.reference_no
+                ).padStart(
+                    4,
+                    "0"
+                )
+            ) +
+            '</p>' +
+
+            '<p>' +
+            safe(
+                selectedRecord.item_contents
+            ) +
+            '</p>' +
+
+            '</div>';
+
+    }
+
+
+    document
+        .getElementById(
+            "printArea"
+        )
+        .innerHTML =
+        html;
+
+
+    window.print();
+
+}
+
+
+/* -------------------------
+   PUBLIC QR SCAN
+------------------------- */
+
+async function displayScan(
+    token,
+    boxNumber
+) {
+
+    document.body.innerHTML =
+
+        '<header>MOOVIT</header>' +
+
+        '<div id="scanBox" class="scan-box">' +
+
+        '<div class="scan-logo">' +
+        'MOOVIT' +
+        '</div>' +
+
+        '<p>Loading...</p>' +
+
+        '</div>';
+
+
+    const scanBox =
+        document.getElementById(
+            "scanBox"
+        );
+
+
+    const result =
+        await supabaseClient
+            .rpc(
+                "get_moovit_qr_record",
+                {
+                    p_qr_token:
+                        token
+                }
+            );
+
+
+    if(
+        result.error ||
+        !result.data ||
+        !result.data.length
+    ) {
+
+        scanBox.innerHTML =
+
+            '<div class="scan-logo">' +
+            'MOOVIT' +
+            '</div>' +
+
+            '<h2>QR code not found</h2>' +
+
+            '<p>' +
+            'This QR code is invalid, expired or no longer active.' +
+            '</p>';
+
+        return;
+
+    }
+
+
+    const record =
+        result.data[0];
+
+
+    const status =
+        record.payment_status === "Paid"
+        ?
+        "Paid"
+        :
+        "Unpaid";
+
+
+    const boxHtml =
+
+        boxNumber === null
+
+        ?
+
+        '<div class="scan-row">' +
+
+        '<strong>Storage:</strong> ' +
+
+        safe(
+            record.box_count
+        ) +
+
+        ' items / boxes' +
+
+        '</div>'
+
+        :
+
+        '<div class="scan-row">' +
+
+        '<strong>Box:</strong> ' +
+
+        safe(
+            boxNumber
+        ) +
+
+        ' of ' +
+
+        safe(
+            record.box_count
+        ) +
+
+        '</div>';
+
+
+    scanBox.innerHTML =
+
+        '<div class="scan-logo">' +
+        'MOOVIT' +
+        '</div>' +
+
+        '<div class="status ' +
+        statusClass(status) +
+        '">' +
+
+        safe(status) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Reference:</strong> ' +
+
+        safe(
+            String(
+                record.reference_no
+            ).padStart(
+                4,
+                "0"
+            )
+        ) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Customer:</strong> ' +
+
+        safe(
+            record.customer_name
+        ) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Item / Contents:</strong> ' +
+
+        safe(
+            record.item_contents
+        ) +
+
+        '</div>' +
+
+        boxHtml +
+
+        '<div class="scan-row">' +
+
+        '<strong>Address:</strong> ' +
+
+        safe(
+            record.address
+        ) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Telephone:</strong> ' +
+
+        safe(
+            record.telephone
+        ) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Email:</strong> ' +
+
+        safe(
+            record.email
+        ) +
+
+        '</div>' +
+
+        '<div class="scan-row">' +
+
+        '<strong>Notes:</strong> ' +
+
+        safe(
+            record.notes || "-"
+        ) +
+
+        '</div>' +
+
+        '<div style="margin-top:20px">' +
+
+        '<button class="green" ' +
+
+        'onclick="confirmDelivery(\\'' +
+        safe(token) +
+        '\\')">' +
+
+        'SEND RECEIPT OF DELIVERY' +
+
+        '</button>' +
+
+        '</div>' +
+
+        '<p id="deliveryMessage" ' +
+
+        'style="font-weight:bold;text-align:center">' +
+
+        '</p>';
+
+}
+
+
+/* -------------------------
+   CONFIRM DELIVERY
+------------------------- */
+
+async function confirmDelivery(
+    token
+) {
+
+    const message =
+        document.getElementById(
+            "deliveryMessage"
+        );
+
+
+    if(!message) {
+
+        return;
+
+    }
+
+
+    if(
+        !confirm(
+            "Confirm the whole delivery has been completed?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Sending...";
+
+
+    const result =
+        await supabaseClient
+            .rpc(
+                "confirm_moovit_delivery",
+                {
+                    p_qr_token:
+                        token
+                }
+            );
+
+
+    if(
+        result.error
+    ) {
+
+        message.textContent =
+            "Could not confirm delivery: " +
+            result.error.message;
+
+        return;
+
+    }
+
+
+    if(
+        !result.data ||
+        !result.data.length
+    ) {
+
+        message.textContent =
+            "Delivery has already been confirmed or the QR is no longer active.";
+
+        return;
+
+    }
+
+
+    message.textContent =
+        "Delivery confirmed. MOOVIT has been notified.";
+
+}
+
+
+/* -------------------------
+   STATUS CLASS
+------------------------- */
+
+function statusClass(
+    status
+) {
+
+    if(
+        status === "Paid"
+    )
+        return "status-paid";
+
+
+    if(
+        status === "Overdue"
+    )
+        return "status-overdue";
+
+
+    if(
+        status === "Due Soon"
+    )
+        return "status-due";
+
+
+    return "status-unpaid";
+
+}
+
+
+/* -------------------------
+   HTML SAFETY
+------------------------- */
+
+function safe(
+    value
+) {
+
+    return String(
+        value === null ||
+        value === undefined
+        ?
+        ""
+        :
+        value
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* -------------------------
+   LOAD PAGE
+------------------------- */
+
+async function loadPage() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const token =
+        params.get(
+            "token"
+        );
+
+
+    const box =
+        params.get(
+            "box"
+        );
+
+
+    if(token) {
+
+        await displayScan(
+            token,
+            box
+            ?
+            parseInt(box)
+            :
+            null
+        );
+
+        return;
+
+    }
+
+
+    if(
+        isPhone()
+    ) {
+
+        document
+            .getElementById(
+                "loginScreen"
+            )
+            .classList.add(
+                "hidden"
+            );
+
+
+        document
+            .getElementById(
+                "computerMessage"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+
+        return;
+
+    }
+
+
+    const sessionResult =
+        await supabaseClient
+            .auth
+            .getSession();
+
+
+    if(
+        sessionResult.data.session
+    ) {
+
+        await showAdmin();
+
+    }
+
+}
+
+
+/* -------------------------
+   AUTH STATE
+------------------------- */
+
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        function(
+            event,
+            session
+        ) {
+
+            if(
+                session &&
+                document.getElementById(
+                    "loginScreen"
+                ) &&
+                !document
+                    .getElementById(
+                        "loginScreen"
+                    )
+                    .classList
+                    .contains(
+                        "hidden"
+                    )
+            ) {
+
+                showAdmin();
+
+            }
+
+        }
+    );
+
+
+/* -------------------------
+   START
+------------------------- */
+
+loadPage();
+
+</script>
+
+</body>
+</html>
